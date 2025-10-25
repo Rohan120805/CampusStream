@@ -1,0 +1,94 @@
+import mongoose from "mongoose";
+
+const videoSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [true, 'Video title is required'],
+        trim: true,
+        maxlength: [200, 'Title cannot exceed 200 characters']
+    },
+    description: {
+        type: String,
+        required: [true, 'Video description is required'],
+        maxlength: [2000, 'Description cannot exceed 2000 characters']
+    },
+    videoUrl: {
+        type: String,
+        required: true
+    },
+    thumbnailUrl: {
+        type: String,
+        default: ''
+    },
+    duration: {
+        type: Number, // in seconds
+        default: 0
+    },
+    uploadedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    subject: {
+        type: String,
+        required: [true, 'Subject is required'],
+        trim: true
+    },
+    topics: [{
+        type: String,
+        trim: true
+    }],
+    tags: [{
+        type: String,
+        trim: true,
+        lowercase: true
+    }],
+    semester: {
+        type: String,
+        enum: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        default: '1'
+    },
+    views: {
+        type: Number,
+        default: 0
+    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    transcript: {
+        type: String,
+        default: ''
+    },
+    summary: {
+        type: String,
+        default: ''
+    },
+    isPublic: {
+        type: Boolean,
+        default: true
+    },
+    isApproved: {
+        type: Boolean,
+        default: true
+    },
+    fileName: {
+        type: String,
+        required: true
+    }
+}, { 
+    timestamps: true 
+});
+
+// Indexes for better query performance
+videoSchema.index({ subject: 1, semester: 1 });
+videoSchema.index({ uploadedBy: 1 });
+videoSchema.index({ tags: 1 });
+videoSchema.index({ createdAt: -1 });
+
+// Virtual for like count
+videoSchema.virtual('likeCount').get(function() {
+    return this.likes.length;
+});
+
+export default mongoose.model("Video", videoSchema);

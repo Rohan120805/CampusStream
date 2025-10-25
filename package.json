@@ -1,9 +1,10 @@
 {
-  "name": "CampusStream",
+  "name": "campus-stream",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon backend/server.js"
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js"
   },
   "type": "module",
   "keywords": [],
@@ -11,9 +12,18 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google-cloud/storage": "^7.17.2",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
-    "mongoose": "^8.13.2"
+    "express-oauth2-jwt-bearer": "^1.7.1",
+    "express-openid-connect": "^2.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.2.0",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.13.2",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

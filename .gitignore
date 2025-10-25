@@ -1,2 +1,7 @@
 .env
 node_modules
+gcs-key.json
+*.mp4
+*.mov
+*.avi
+uploads/
