@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon backend/server.js",
     "start": "node backend/server.js",
-    "vercel-build": "echo 'Building for Vercel...'",
+    "build": "cd frontend && npm install && npm run build",
     "deploy": "vercel --prod"
   },
   "type": "module",
