@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   PlayCircle, 
@@ -14,7 +14,6 @@ import {
 import { formatDate, formatViews } from '../lib/utils';
 
 export const PlaylistDetailPage: React.FC = () => {
-  const { id: _id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
   const playlist = location.state?.playlist;
