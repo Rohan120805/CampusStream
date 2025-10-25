@@ -158,7 +158,7 @@ export const HomePage: React.FC = () => {
               onChange={(e) =>
                 setFilters({ ...filters, search: e.target.value })
               }
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 pl-12 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 pl-12 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             />
             <svg
               className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
@@ -176,13 +176,13 @@ export const HomePage: React.FC = () => {
           </form>
 
           {/* Filters */}
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             <select
               value={filters.subject}
               onChange={(e) =>
                 setFilters({ ...filters, subject: e.target.value })
               }
-              className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+              className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             >
               <option value="">All Subjects</option>
               {subjects.map((subject) => (
@@ -197,7 +197,7 @@ export const HomePage: React.FC = () => {
               onChange={(e) =>
                 setFilters({ ...filters, unit: e.target.value })
               }
-              className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+              className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             >
               <option value="">All Units</option>
               <option value="CO1">CO1</option>
@@ -212,7 +212,7 @@ export const HomePage: React.FC = () => {
               onChange={(e) =>
                 setFilters({ ...filters, year: e.target.value })
               }
-              className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+              className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             >
               <option value="">All Years</option>
               <option value="1st Year">1st Year</option>
@@ -226,12 +226,12 @@ export const HomePage: React.FC = () => {
               onChange={(e) =>
                 setFilters({ ...filters, semester: e.target.value })
               }
-              className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+              className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             >
               <option value="">All Semesters</option>
               {semesters.map((semester) => (
                 <option key={semester} value={semester}>
-                  Semester {semester}
+                  Sem {semester}
                 </option>
               ))}
             </select>
@@ -241,7 +241,7 @@ export const HomePage: React.FC = () => {
               onChange={(e) =>
                 setFilters({ ...filters, sortBy: e.target.value })
               }
-              className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+              className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             >
               <option value="createdAt">Latest</option>
               <option value="views">Most Viewed</option>
@@ -263,6 +263,7 @@ export const HomePage: React.FC = () => {
                   order: 'desc',
                 })
               }
+              className="whitespace-nowrap"
             >
               Clear Filters
             </Button>
@@ -313,7 +314,7 @@ export const HomePage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           >
             {data.data.map((video: any, index: number) => (
               <motion.div
@@ -321,23 +322,24 @@ export const HomePage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 onClick={() => navigate(`/video/${video._id}`)}
                 className="cursor-pointer"
               >
                 <BackgroundGradient className="p-0 h-full overflow-hidden">
-                  <div className="relative group">
+                  <div className="relative group h-full flex flex-col">
                     {/* Thumbnail */}
-                    <div className="relative aspect-video bg-slate-800 overflow-hidden">
+                    <div className="relative aspect-video bg-slate-800 overflow-hidden flex-shrink-0">
                       {video.thumbnailUrl ? (
                         <img
                           src={video.thumbnailUrl}
                           alt={video.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <svg
-                            className="w-16 h-16 text-gray-600"
+                            className="w-12 h-12 sm:w-16 sm:h-16 text-gray-600"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -348,32 +350,36 @@ export const HomePage: React.FC = () => {
 
                       {/* Duration Badge */}
                       {video.duration && (
-                        <div className="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded text-xs font-semibold">
+                        <div className="absolute bottom-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded text-xs font-semibold">
                           {formatDuration(video.duration)}
                         </div>
                       )}
 
                       {/* Play Icon Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50">
-                        <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/50">
+                        <motion.div 
+                          initial={{ scale: 0.8 }}
+                          whileHover={{ scale: 1.1 }}
+                          className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50"
+                        >
                           <svg
-                            className="w-8 h-8 text-white ml-1"
+                            className="w-6 h-6 sm:w-8 sm:h-8 text-white ml-1"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
                             <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
                           </svg>
-                        </div>
+                        </motion.div>
                       </div>
                     </div>
 
                     {/* Video Info */}
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold mb-2 line-clamp-2 group-hover:text-purple-400 transition-colors">
+                    <div className="p-3 sm:p-4 flex-grow flex flex-col">
+                      <h3 className="text-base sm:text-lg font-semibold mb-2 line-clamp-2 group-hover:text-purple-400 transition-colors">
                         {video.title}
                       </h3>
 
-                      <p className="text-sm text-gray-400 mb-3 line-clamp-2">
+                      <p className="text-xs sm:text-sm text-gray-400 mb-3 line-clamp-2">
                         {video.description}
                       </p>
 
@@ -390,18 +396,18 @@ export const HomePage: React.FC = () => {
                           </span>
                         )}
                         {video.subject && (
-                          <span className="inline-block bg-green-600/20 text-green-400 text-xs px-2 py-0.5 rounded">
+                          <span className="inline-block bg-green-600/20 text-green-400 text-xs px-2 py-0.5 rounded truncate max-w-full">
                             {video.subject}
                           </span>
                         )}
                       </div>
 
                       {/* Meta Info */}
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <div className="flex items-center space-x-3">
+                      <div className="flex items-center justify-between text-xs text-gray-500 mt-auto">
+                        <div className="flex items-center space-x-2 sm:space-x-3">
                           <span className="flex items-center">
                             <svg
-                              className="w-4 h-4 mr-1"
+                              className="w-3 h-3 sm:w-4 sm:h-4 mr-1"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -424,7 +430,7 @@ export const HomePage: React.FC = () => {
 
                           <span className="flex items-center">
                             <svg
-                              className="w-4 h-4 mr-1"
+                              className="w-3 h-3 sm:w-4 sm:h-4 mr-1"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -436,7 +442,7 @@ export const HomePage: React.FC = () => {
                           {video.documents && video.documents.length > 0 && (
                             <span className="flex items-center text-green-400" title="Documents available">
                               <svg
-                                className="w-4 h-4 mr-1"
+                                className="w-3 h-3 sm:w-4 sm:h-4 mr-1"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -453,10 +459,8 @@ export const HomePage: React.FC = () => {
                           )}
                         </div>
 
-                        <span>{formatDate(video.createdAt)}</span>
+                        <span className="hidden sm:inline">{formatDate(video.createdAt)}</span>
                       </div>
-
-                      {/* Remove old subject tag since it's now shown above */}
                     </div>
                   </div>
                 </BackgroundGradient>

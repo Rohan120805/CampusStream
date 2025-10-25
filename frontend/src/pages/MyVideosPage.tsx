@@ -86,17 +86,17 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto my-4"
       >
-        <div className="p-6 border-b border-slate-800">
-          <h2 className="text-2xl font-bold text-white">Edit Video</h2>
+        <div className="p-4 sm:p-6 border-b border-slate-800 sticky top-0 bg-slate-900 z-10">
+          <h2 className="text-xl sm:text-2xl font-bold text-white">Edit Video</h2>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Title
@@ -106,7 +106,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+              className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
               required
             />
           </div>
@@ -120,12 +120,12 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
               value={formData.description}
               onChange={handleChange}
               rows={4}
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+              className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
               required
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Subject
@@ -135,7 +135,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
                 required
               />
             </div>
@@ -148,7 +148,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
                 name="unit"
                 value={formData.unit}
                 onChange={handleChange}
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
                 required
               >
                 <option value="">Select Unit</option>
@@ -161,7 +161,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Year
@@ -170,7 +170,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
                 name="year"
                 value={formData.year}
                 onChange={handleChange}
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
                 required
               >
                 <option value="">Select Year</option>
@@ -189,7 +189,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
                 name="semester"
                 value={formData.semester}
                 onChange={handleChange}
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
               >
                 <option value="1">Semester 1</option>
                 <option value="2">Semester 2</option>
@@ -207,7 +207,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
               value={formData.topics}
               onChange={handleChange}
               placeholder="e.g., Introduction, Basics, Advanced"
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+              className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             />
           </div>
 
@@ -221,7 +221,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
               value={formData.tags}
               onChange={handleChange}
               placeholder="e.g., programming, tutorial, beginner"
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+              className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
             />
           </div>
 
@@ -234,21 +234,21 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
                 type="file"
                 accept=".txt"
                 onChange={(e) => setTranscriptFile(e.target.files?.[0] || null)}
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700 file:cursor-pointer"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700 file:cursor-pointer transition-all duration-300"
               />
             </div>
             {transcriptFile && (
-              <p className="text-sm text-green-400 mt-2">
+              <p className="text-xs sm:text-sm text-green-400 mt-2">
                 Selected: {transcriptFile.name}
               </p>
             )}
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 sticky bottom-0 bg-slate-900 pb-2">
             <Button
               type="submit"
               disabled={isUpdating}
-              className="flex-1"
+              className="flex-1 order-2 sm:order-1"
             >
               {isUpdating ? 'Updating...' : 'Update Video'}
             </Button>
@@ -257,6 +257,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
               variant="outline"
               onClick={onClose}
               disabled={isUpdating}
+              className="order-1 sm:order-2"
             >
               Cancel
             </Button>
@@ -328,16 +329,29 @@ export const MyVideosPage: React.FC = () => {
   const videos = data?.data || [];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-slate-950 text-white page-enter">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">My Videos</h1>
-          <p className="text-gray-400">Manage your uploaded videos</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 sm:mb-8"
+        >
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              My Videos
+            </span>
+          </h1>
+          <p className="text-gray-400 text-sm sm:text-base">Manage your uploaded videos</p>
+        </motion.div>
 
         {/* Upload Button */}
-        <div className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-6 sm:mb-8"
+        >
           <Button
             onClick={() => navigate('/upload')}
             className="flex items-center gap-2"
@@ -345,28 +359,36 @@ export const MyVideosPage: React.FC = () => {
             <Upload size={18} />
             Upload New Video
           </Button>
-        </div>
+        </motion.div>
 
         {/* Videos Grid */}
         {videos.length === 0 ? (
-          <BackgroundGradient className="p-12 text-center">
-            <div className="text-6xl mb-4">📹</div>
-            <h2 className="text-2xl font-bold mb-2">No Videos Yet</h2>
-            <p className="text-gray-400 mb-6">
-              You haven't uploaded any videos yet. Start sharing your knowledge!
-            </p>
-            <Button onClick={() => navigate('/upload')}>
-              <Upload size={18} className="mr-2" />
-              Upload Your First Video
-            </Button>
-          </BackgroundGradient>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <BackgroundGradient className="p-8 sm:p-12 text-center">
+              <div className="text-5xl sm:text-6xl mb-4">📹</div>
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">No Videos Yet</h2>
+              <p className="text-gray-400 mb-6 text-sm sm:text-base">
+                You haven't uploaded any videos yet. Start sharing your knowledge!
+              </p>
+              <Button onClick={() => navigate('/upload')}>
+                <Upload size={18} className="mr-2" />
+                Upload Your First Video
+              </Button>
+            </BackgroundGradient>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {videos.map((video: Video) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            {videos.map((video: Video, index: number) => (
               <motion.div
                 key={video._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <BackgroundGradient className="h-full">
                   <div className="p-0 h-full flex flex-col">
@@ -376,26 +398,26 @@ export const MyVideosPage: React.FC = () => {
                         <img
                           src={video.thumbnailUrl}
                           alt={video.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Play size={48} className="text-gray-600" />
+                          <Play size={40} className="text-gray-600" />
                         </div>
                       )}
-                      <div className="absolute top-2 right-2 bg-black/70 px-2 py-1 rounded text-xs">
+                      <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-xs">
                         {video.views || 0} views
                       </div>
                     </div>
 
                     {/* Content */}
-                    <div className="p-4 flex-1 flex flex-col">
-                      <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                    <div className="p-3 sm:p-4 flex-1 flex flex-col">
+                      <h3 className="text-base sm:text-lg font-semibold mb-2 line-clamp-2">
                         {video.title}
                       </h3>
 
                       {/* Metadata */}
-                      <div className="flex flex-wrap gap-2 mb-3">
+                      <div className="flex flex-wrap gap-1 sm:gap-2 mb-3">
                         {video.unit && (
                           <span className="inline-flex items-center gap-1 bg-purple-600/20 text-purple-400 px-2 py-0.5 rounded text-xs">
                             <Layers size={12} />
@@ -409,7 +431,7 @@ export const MyVideosPage: React.FC = () => {
                           </span>
                         )}
                         {video.subject && (
-                          <span className="inline-flex items-center gap-1 bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs">
+                          <span className="inline-flex items-center gap-1 bg-green-600/20 text-green-400 px-2 py-0.5 rounded text-xs truncate max-w-full">
                             <BookOpen size={12} />
                             {video.subject}
                           </span>
@@ -417,7 +439,7 @@ export const MyVideosPage: React.FC = () => {
                       </div>
 
                       {/* Stats */}
-                      <div className="flex items-center gap-4 text-sm text-gray-400 mb-3">
+                      <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-400 mb-3">
                         <span className="flex items-center gap-1">
                           <Eye size={14} />
                           {video.views || 0}
@@ -429,7 +451,7 @@ export const MyVideosPage: React.FC = () => {
                         {video.transcript && (
                           <span className="flex items-center gap-1 text-green-400">
                             <FileText size={14} />
-                            Transcript
+                            <span className="hidden sm:inline">Transcript</span>
                           </span>
                         )}
                       </div>
@@ -448,12 +470,13 @@ export const MyVideosPage: React.FC = () => {
                           onClick={() => navigate(`/video/${video._id}`)}
                         >
                           <Play size={14} className="mr-1" />
-                          View
+                          <span className="hidden sm:inline">View</span>
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => setEditingVideo(video)}
+                          title="Edit video"
                         >
                           <Edit size={14} />
                         </Button>
@@ -463,6 +486,7 @@ export const MyVideosPage: React.FC = () => {
                           className="text-red-400 hover:text-red-300 hover:border-red-400"
                           onClick={() => handleDelete(video._id)}
                           disabled={deletingVideoId === video._id}
+                          title="Delete video"
                         >
                           {deletingVideoId === video._id ? (
                             <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />

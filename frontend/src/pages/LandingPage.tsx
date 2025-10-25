@@ -314,25 +314,25 @@ export const LandingPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.8 }}
-              className="grid grid-cols-3 gap-8 max-w-2xl mx-auto mt-20"
+              className="grid grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto mt-12 sm:mt-20"
             >
               <div className="text-center">
-                <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                   1000+
                 </div>
-                <div className="text-gray-400 mt-2">Videos</div>
+                <div className="text-gray-400 mt-2 text-xs sm:text-sm lg:text-base">Videos</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                   50+
                 </div>
-                <div className="text-gray-400 mt-2">Subjects</div>
+                <div className="text-gray-400 mt-2 text-xs sm:text-sm lg:text-base">Subjects</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                   5000+
                 </div>
-                <div className="text-gray-400 mt-2">Students</div>
+                <div className="text-gray-400 mt-2 text-xs sm:text-sm lg:text-base">Students</div>
               </div>
             </motion.div>
           </motion.div>
@@ -340,26 +340,26 @@ export const LandingPage: React.FC = () => {
       </Sparkles>
 
       {/* Features Section */}
-      <div id="features" className="py-20 bg-slate-900/50">
+      <div id="features" className="py-12 sm:py-20 bg-slate-900/50">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                 Everything You Need
               </span>
             </h2>
-            <p className="text-xl text-gray-400">
+            <p className="text-lg sm:text-xl text-gray-400">
               Powerful features designed for modern learning
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -367,13 +367,14 @@ export const LandingPage: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 viewport={{ once: true }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
-                <BackgroundGradient className="p-6 h-full">
-                  <div className="text-5xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold mb-2 text-white">
+                <BackgroundGradient className="p-4 sm:p-6 h-full">
+                  <div className="text-4xl sm:text-5xl mb-4">{feature.icon}</div>
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-white">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400">{feature.description}</p>
+                  <p className="text-sm sm:text-base text-gray-400">{feature.description}</p>
                 </BackgroundGradient>
               </motion.div>
             ))}
@@ -382,7 +383,7 @@ export const LandingPage: React.FC = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-20 bg-gradient-to-b from-slate-900/50 to-slate-950">
+      <div className="py-12 sm:py-20 bg-gradient-to-b from-slate-900/50 to-slate-950">
         <div className="container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -390,19 +391,19 @@ export const LandingPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 Ready to Start Learning?
               </span>
             </h2>
-            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-400 mb-6 sm:mb-8 max-w-2xl mx-auto">
               Join thousands of students already using CampusStream to excel in
               their studies
             </p>
             <Button
               onClick={handleLogin}
               size="lg"
-              className="text-lg px-12 py-6"
+              className="text-base sm:text-lg px-8 sm:px-12 py-4 sm:py-6"
             >
               Login with Auth0
             </Button>
@@ -411,8 +412,8 @@ export const LandingPage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-slate-800">
-        <div className="container mx-auto px-4 text-center text-gray-400">
+      <footer className="py-6 sm:py-8 border-t border-slate-800">
+        <div className="container mx-auto px-4 text-center text-gray-400 text-sm sm:text-base">
           <p>© 2025 CampusStream. All rights reserved.</p>
         </div>
       </footer>

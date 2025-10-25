@@ -95,11 +95,11 @@ export const VideoPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="min-h-screen bg-slate-950 text-white page-enter">
+      <div className="container mx-auto px-4 py-4 sm:py-8 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Main Content - Left Side */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Video Player */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -125,51 +125,51 @@ export const VideoPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <BackgroundGradient className="p-6">
-                <h1 className="text-3xl font-bold mb-4">{video.title}</h1>
+              <BackgroundGradient className="p-4 sm:p-6">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4">{video.title}</h1>
 
                 {/* Metadata Badges */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {video.unit && (
-                    <span className="inline-flex items-center gap-1 bg-purple-600/20 text-purple-400 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-flex items-center gap-1 bg-purple-600/20 text-purple-400 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                       <Layers size={14} />
                       {video.unit}
                     </span>
                   )}
                   {video.year && (
-                    <span className="inline-flex items-center gap-1 bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-flex items-center gap-1 bg-blue-600/20 text-blue-400 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                       <GraduationCap size={14} />
                       {video.year}
                     </span>
                   )}
                   {video.subject && (
-                    <span className="inline-flex items-center gap-1 bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-flex items-center gap-1 bg-green-600/20 text-green-400 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                       <BookOpen size={14} />
                       {video.subject}
                     </span>
                   )}
                   {video.semester && (
-                    <span className="inline-flex items-center gap-1 bg-orange-600/20 text-orange-400 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-flex items-center gap-1 bg-orange-600/20 text-orange-400 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                       Sem {video.semester}
                     </span>
                   )}
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center gap-6 mb-4 text-gray-400">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-6 mb-4 text-sm sm:text-base text-gray-400">
                   <span className="flex items-center gap-2">
-                    <Eye size={18} />
+                    <Eye size={16} className="sm:w-[18px] sm:h-[18px]" />
                     {formatViews(video.views || 0)} views
                   </span>
                   <span className="flex items-center gap-2">
                     <Heart
-                      size={18}
-                      className={isLiked ? 'fill-red-500 text-red-500' : ''}
+                      size={16}
+                      className={`sm:w-[18px] sm:h-[18px] ${isLiked ? 'fill-red-500 text-red-500' : ''}`}
                     />
                     {video.likes?.length || 0} likes
                   </span>
                   <span className="flex items-center gap-2">
-                    <Calendar size={18} />
+                    <Calendar size={16} className="sm:w-[18px] sm:h-[18px]" />
                     {formatDate(video.createdAt)}
                   </span>
                 </div>
@@ -190,8 +190,8 @@ export const VideoPage: React.FC = () => {
                 {/* Description */}
                 {video.description && (
                   <div>
-                    <h2 className="text-xl font-semibold mb-2">Description</h2>
-                    <p className="text-gray-300 whitespace-pre-wrap">
+                    <h2 className="text-lg sm:text-xl font-semibold mb-2">Description</h2>
+                    <p className="text-sm sm:text-base text-gray-300 whitespace-pre-wrap">
                       {video.description}
                     </p>
                   </div>
@@ -200,7 +200,7 @@ export const VideoPage: React.FC = () => {
                 {/* Topics */}
                 {video.topics && video.topics.length > 0 && (
                   <div className="mt-6">
-                    <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <h3 className="text-base sm:text-lg font-semibold mb-3 flex items-center gap-2">
                       <Tag size={18} />
                       Topics Covered
                     </h3>
@@ -208,7 +208,7 @@ export const VideoPage: React.FC = () => {
                       {video.topics.map((topic, index) => (
                         <span
                           key={index}
-                          className="bg-slate-800 text-gray-300 px-3 py-1 rounded-full text-sm"
+                          className="bg-slate-800 text-gray-300 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
                         >
                           {topic}
                         </span>
@@ -242,13 +242,13 @@ export const VideoPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <BackgroundGradient className="p-6">
-                  <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                    <FileText size={20} />
+                <BackgroundGradient className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                    <FileText size={18} className="sm:w-[20px] sm:h-[20px]" />
                     Transcript
                   </h2>
-                  <div className="bg-slate-900/50 p-4 rounded-lg max-h-96 overflow-y-auto">
-                    <p className="text-gray-300 whitespace-pre-wrap leading-relaxed">
+                  <div className="bg-slate-900/50 p-3 sm:p-4 rounded-lg max-h-96 overflow-y-auto">
+                    <p className="text-sm sm:text-base text-gray-300 whitespace-pre-wrap leading-relaxed">
                       {video.transcript}
                     </p>
                   </div>
@@ -258,16 +258,16 @@ export const VideoPage: React.FC = () => {
           </div>
 
           {/* Sidebar - Right Side */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Uploader Info */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <BackgroundGradient className="p-6">
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  <User size={18} />
+              <BackgroundGradient className="p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-semibold mb-4 flex items-center gap-2">
+                  <User size={16} className="sm:w-[18px] sm:h-[18px]" />
                   Uploaded By
                 </h3>
                 {video.uploadedBy && (
@@ -276,12 +276,12 @@ export const VideoPage: React.FC = () => {
                       <img
                         src={video.uploadedBy.picture}
                         alt={video.uploadedBy.name}
-                        className="w-12 h-12 rounded-full border-2 border-purple-500"
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-purple-500"
                       />
                     )}
                     <div>
-                      <div className="font-semibold">{video.uploadedBy.name}</div>
-                      <div className="text-sm text-gray-400">
+                      <div className="font-semibold text-sm sm:text-base">{video.uploadedBy.name}</div>
+                      <div className="text-xs sm:text-sm text-gray-400 break-all">
                         {video.uploadedBy.email}
                       </div>
                       {video.uploadedBy.department && (
@@ -302,22 +302,22 @@ export const VideoPage: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <BackgroundGradient className="p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <FileText size={18} />
+                <BackgroundGradient className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-lg font-semibold mb-4 flex items-center gap-2">
+                    <FileText size={16} className="sm:w-[18px] sm:h-[18px]" />
                     Related Documents ({video.documents.length})
                   </h3>
                   <div className="space-y-3">
                     {video.documents.map((doc, index) => (
                       <div
                         key={index}
-                        className="bg-slate-900/50 rounded-lg p-4 hover:bg-slate-800/50 transition-colors"
+                        className="bg-slate-900/50 rounded-lg p-3 sm:p-4 hover:bg-slate-800/50 transition-colors"
                       >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-start gap-3 flex-1">
-                            <span className="text-2xl">{getFileIcon(doc.type)}</span>
+                        <div className="flex items-start justify-between gap-2 sm:gap-3">
+                          <div className="flex items-start gap-2 sm:gap-3 flex-1 min-w-0">
+                            <span className="text-xl sm:text-2xl flex-shrink-0">{getFileIcon(doc.type)}</span>
                             <div className="flex-1 min-w-0">
-                              <div className="font-medium text-sm truncate">
+                              <div className="font-medium text-xs sm:text-sm truncate">
                                 {doc.name}
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
@@ -365,9 +365,9 @@ export const VideoPage: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <BackgroundGradient className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Statistics</h3>
-                <div className="space-y-3">
+              <BackgroundGradient className="p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-semibold mb-4">Statistics</h3>
+                <div className="space-y-3 text-sm sm:text-base">
                   <div className="flex justify-between">
                     <span className="text-gray-400">Views</span>
                     <span className="font-semibold">{formatViews(video.views || 0)}</span>
@@ -382,7 +382,7 @@ export const VideoPage: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Uploaded</span>
-                    <span className="font-semibold text-sm">{formatDate(video.createdAt)}</span>
+                    <span className="font-semibold text-xs sm:text-sm">{formatDate(video.createdAt)}</span>
                   </div>
                 </div>
               </BackgroundGradient>
@@ -395,7 +395,7 @@ export const VideoPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mt-6"
+          className="mt-4 sm:mt-6"
         >
           <CommentSection videoId={id!} />
         </motion.div>

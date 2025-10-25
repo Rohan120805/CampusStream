@@ -155,27 +155,27 @@ export const UploadPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white py-8">
+    <div className="min-h-screen bg-slate-950 text-white py-4 sm:py-8 page-enter">
       <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-4xl font-bold mb-2">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
           <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
             Upload Video
           </span>
         </h1>
-        <p className="text-gray-400 mb-2">Share your educational content with the community</p>
-        <div className="flex items-center gap-2 text-sm text-green-400 mb-8">
+        <p className="text-gray-400 mb-2 text-sm sm:text-base">Share your educational content with the community</p>
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-green-400 mb-6 sm:mb-8">
           <FileText size={16} />
           <span>Transcription will be automatically generated using AI</span>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Video Upload */}
-          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6">
+          <div className="glass-effect rounded-lg p-4 sm:p-6">
             <label className="block mb-2 text-sm font-medium flex items-center gap-2">
               <FileVideo size={18} className="text-purple-400" />
               Video File <span className="text-red-400">*</span>
             </label>
-            <div className="border-2 border-dashed border-slate-700 rounded-lg p-8 text-center hover:border-purple-500 transition-colors">
+            <div className="border-2 border-dashed border-slate-700 rounded-lg p-6 sm:p-8 text-center hover:border-purple-500 transition-all duration-300">
               <input
                 type="file"
                 accept="video/*"
@@ -185,16 +185,16 @@ export const UploadPage: React.FC = () => {
                 required
               />
               <label htmlFor="video-upload" className="cursor-pointer">
-                <Upload className="mx-auto mb-4 text-gray-400" size={48} />
+                <Upload className="mx-auto mb-4 text-gray-400" size={40} />
                 {videoFile ? (
-                  <div className="text-green-400">
+                  <div className="text-green-400 text-sm sm:text-base">
                     <CheckCircle className="inline mr-2" size={20} />
                     {videoFile.name} ({formatFileSize(videoFile.size)})
                   </div>
                 ) : (
                   <div>
-                    <p className="text-gray-300 mb-2">Click to upload video</p>
-                    <p className="text-sm text-gray-500">MP4, WebM, OGG, AVI, MOV (Max 500MB)</p>
+                    <p className="text-gray-300 mb-2 text-sm sm:text-base">Click to upload video</p>
+                    <p className="text-xs sm:text-sm text-gray-500">MP4, WebM, OGG, AVI, MOV (Max 500MB)</p>
                   </div>
                 )}
               </label>
@@ -202,7 +202,7 @@ export const UploadPage: React.FC = () => {
           </div>
 
           {/* Thumbnail Upload */}
-          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6">
+          <div className="glass-effect rounded-lg p-4 sm:p-6">
             <label className="block mb-2 text-sm font-medium flex items-center gap-2">
               <Image size={18} className="text-blue-400" />
               Thumbnail (Optional)
@@ -211,10 +211,10 @@ export const UploadPage: React.FC = () => {
               type="file"
               accept="image/*"
               onChange={handleThumbnailChange}
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
             />
             {thumbnailFile && (
-              <p className="mt-2 text-sm text-gray-400">
+              <p className="mt-2 text-xs sm:text-sm text-gray-400">
                 <CheckCircle className="inline mr-1" size={16} />
                 {thumbnailFile.name}
               </p>
@@ -222,7 +222,7 @@ export const UploadPage: React.FC = () => {
           </div>
 
           {/* Basic Information */}
-          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4">
+          <div className="glass-effect rounded-lg p-4 sm:p-6 space-y-4">
             <div>
               <label className="block mb-2 text-sm font-medium">
                 Topic/Title <span className="text-red-400">*</span>
@@ -233,7 +233,7 @@ export const UploadPage: React.FC = () => {
                 value={formData.title}
                 onChange={handleInputChange}
                 placeholder="e.g., Introduction to React Hooks"
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
                 required
               />
             </div>
@@ -248,16 +248,16 @@ export const UploadPage: React.FC = () => {
                 onChange={handleInputChange}
                 placeholder="Describe what this video covers..."
                 rows={4}
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none text-sm sm:text-base transition-all duration-300"
               />
             </div>
           </div>
 
           {/* Academic Details */}
-          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4">
-            <h3 className="text-lg font-semibold mb-4">Academic Details</h3>
+          <div className="glass-effect rounded-lg p-4 sm:p-6 space-y-4">
+            <h3 className="text-base sm:text-lg font-semibold mb-4">Academic Details</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block mb-2 text-sm font-medium">
                   Subject <span className="text-red-400">*</span>
@@ -267,8 +267,8 @@ export const UploadPage: React.FC = () => {
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  placeholder="e.g., Data Structures, Web Development, Machine Learning"
-                  className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="e.g., Data Structures"
+                  className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
                   required
                 />
               </div>
@@ -281,7 +281,7 @@ export const UploadPage: React.FC = () => {
                   name="unit"
                   value={formData.unit}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
                   required
                 >
                   <option value="CO1">CO1</option>
@@ -300,7 +300,7 @@ export const UploadPage: React.FC = () => {
                   name="year"
                   value={formData.year}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
                   required
                 >
                   <option value="1st Year">1st Year</option>
@@ -318,7 +318,7 @@ export const UploadPage: React.FC = () => {
                   name="semester"
                   value={formData.semester}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
                 >
                   <option value="1">Semester 1</option>
                   <option value="2">Semester 2</option>
@@ -336,7 +336,7 @@ export const UploadPage: React.FC = () => {
                 value={formData.topics}
                 onChange={handleInputChange}
                 placeholder="e.g., useState, useEffect, Custom Hooks"
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
               />
             </div>
 
@@ -350,13 +350,13 @@ export const UploadPage: React.FC = () => {
                 value={formData.tags}
                 onChange={handleInputChange}
                 placeholder="e.g., react, javascript, frontend"
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
               />
             </div>
           </div>
 
           {/* Documents Upload */}
-          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6">
+          <div className="glass-effect rounded-lg p-4 sm:p-6">
             <label className="block mb-4 text-sm font-medium flex items-center gap-2">
               <FileText size={18} className="text-green-400" />
               Related Documents (PDF, PPTX, DOCX)
@@ -367,23 +367,23 @@ export const UploadPage: React.FC = () => {
               accept=".pdf,.pptx,.docx,.ppt,.doc"
               multiple
               onChange={handleDocumentChange}
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base transition-all duration-300"
             />
 
             {documentFiles.length > 0 && (
               <div className="mt-4 space-y-2">
-                <p className="text-sm text-gray-400 mb-2">{documentFiles.length} document(s) selected:</p>
+                <p className="text-xs sm:text-sm text-gray-400 mb-2">{documentFiles.length} document(s) selected:</p>
                 {documentFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between bg-slate-800 px-4 py-2 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <FileText size={16} className="text-green-400" />
-                      <span className="text-sm">{file.name}</span>
-                      <span className="text-xs text-gray-500">({formatFileSize(file.size)})</span>
+                  <div key={index} className="flex items-center justify-between bg-slate-800 px-3 sm:px-4 py-2 rounded-lg">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <FileText size={16} className="text-green-400 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm truncate">{file.name}</span>
+                      <span className="text-xs text-gray-500 flex-shrink-0">({formatFileSize(file.size)})</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => removeDocument(index)}
-                      className="text-red-400 hover:text-red-300"
+                      className="text-red-400 hover:text-red-300 ml-2 flex-shrink-0"
                     >
                       <X size={18} />
                     </button>
@@ -395,7 +395,7 @@ export const UploadPage: React.FC = () => {
 
           {/* Upload Progress */}
           {uploadProgress.status !== 'idle' && (
-            <div className={`p-4 rounded-lg ${
+            <div className={`p-4 rounded-lg text-sm sm:text-base ${
               uploadProgress.status === 'uploading' ? 'bg-blue-900/20 border border-blue-800' :
               uploadProgress.status === 'success' ? 'bg-green-900/20 border border-green-800' :
               'bg-red-900/20 border border-red-800'
@@ -412,7 +412,7 @@ export const UploadPage: React.FC = () => {
           <button
             type="submit"
             disabled={uploadProgress.status === 'uploading'}
-            className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] active:scale-[0.98]"
           >
             {uploadProgress.status === 'uploading' ? 'Uploading...' : 'Upload Video'}
           </button>
