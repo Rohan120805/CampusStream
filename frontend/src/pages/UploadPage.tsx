@@ -22,8 +22,6 @@ export const UploadPage: React.FC = () => {
     topics: '',
     tags: ''
   });
-  const [customSubject, setCustomSubject] = useState('');
-
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [documentFiles, setDocumentFiles] = useState<File[]>([]);
@@ -33,23 +31,8 @@ export const UploadPage: React.FC = () => {
     progress: 0
   });
 
-  // Fetch all subjects dynamically from the database
-  const { data: subjectsData } = useQuery({
-    queryKey: ['subjects'],
-    queryFn: () => videoService.getAllSubjects(),
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
-  });
-
-  const subjects = subjectsData || [];
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    
-    // If selecting "custom" for subject, clear the subject value
-    if (name === 'subject' && value === 'custom') {
-      setFormData({ ...formData, subject: '' });
-      return;
-    }
     
     setFormData({
       ...formData,
@@ -279,35 +262,15 @@ export const UploadPage: React.FC = () => {
                 <label className="block mb-2 text-sm font-medium">
                   Subject <span className="text-red-400">*</span>
                 </label>
-                <select
+                <input
+                  type="text"
                   name="subject"
-                  value={formData.subject || 'custom'}
+                  value={formData.subject}
                   onChange={handleInputChange}
+                  placeholder="e.g., Data Structures, Web Development, Machine Learning"
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  required={!customSubject}
-                >
-                  <option value="">Select a subject...</option>
-                  {subjects.map((subject) => (
-                    <option key={subject} value={subject}>
-                      {subject}
-                    </option>
-                  ))}
-                  <option value="custom">➕ Add New Subject</option>
-                </select>
-                
-                {formData.subject === '' && (
-                  <input
-                    type="text"
-                    value={customSubject}
-                    onChange={(e) => {
-                      setCustomSubject(e.target.value);
-                      setFormData({ ...formData, subject: e.target.value });
-                    }}
-                    placeholder="Enter new subject name"
-                    className="w-full mt-2 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    required
-                  />
-                )}
+                  required
+                />
               </div>
 
               <div>

@@ -274,8 +274,18 @@ export const updateVideo = async (req, res) => {
         if (subject) video.subject = subject;
         if (unit) video.unit = unit;
         if (year) video.year = year;
-        if (topics) video.topics = topics.split(',').map(t => t.trim());
-        if (tags) video.tags = tags.split(',').map(t => t.trim());
+        if (topics) {
+            // Handle both string and array formats
+            video.topics = Array.isArray(topics) 
+                ? topics 
+                : topics.split(',').map(t => t.trim());
+        }
+        if (tags) {
+            // Handle both string and array formats
+            video.tags = Array.isArray(tags) 
+                ? tags 
+                : tags.split(',').map(t => t.trim());
+        }
         if (semester) video.semester = semester;
 
         await video.save();
