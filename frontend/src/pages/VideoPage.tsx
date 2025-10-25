@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { videoService } from '../services/video.service';
@@ -13,7 +13,6 @@ import { VideoNotes } from '../components/video/VideoNotes';
 import { VideoActions } from '../components/video/VideoActions';
 import { formatDate, formatViews } from '../lib/utils';
 import { 
-  Play, 
   Heart, 
   Eye, 
   Calendar, 
