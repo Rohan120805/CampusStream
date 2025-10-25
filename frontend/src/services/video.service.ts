@@ -63,6 +63,21 @@ export const videoService = {
     });
     return data;
   },
+
+  getRelatedVideos: async (id: string, limit: number = 6) => {
+    const { data } = await api.get(`/videos/${id}/related`, { params: { limit } });
+    return data;
+  },
+
+  incrementShareCount: async (id: string) => {
+    const { data } = await api.post(`/videos/${id}/share`);
+    return data;
+  },
+
+  updateChapters: async (id: string, chapters: any[]) => {
+    const { data } = await api.put(`/videos/${id}/chapters`, { chapters });
+    return data;
+  },
 };
 
 export default videoService;

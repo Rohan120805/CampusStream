@@ -8,9 +8,26 @@ export interface User {
   department?: string;
   uploadedVideos: string[];
   playlists: string[];
+  followers: string[];
+  following: string[];
+  bookmarks: string[];
+  watchLater: string[];
+  watchHistory: WatchHistory[];
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface WatchHistory {
+  video: string;
+  lastWatchedPosition: number;
+  lastWatchedAt: string;
+}
+
+export interface VideoChapter {
+  title: string;
+  timestamp: number;
+  description?: string;
 }
 
 export interface Video {
@@ -33,6 +50,10 @@ export interface Video {
   transcript?: string;
   transcriptUrl?: string;
   summary?: string;
+  chapters?: VideoChapter[];
+  bookmarkedBy: string[];
+  watchLaterBy: string[];
+  shares: number;
   isPublic: boolean;
   isApproved: boolean;
   fileName: string;

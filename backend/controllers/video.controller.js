@@ -562,3 +562,130 @@ export const getAllSubjects = async (req, res) => {
         });
     }
 };
+
+/**
+ * Get related videos based on subject, unit, and year
+ */
+export const getRelatedVideos = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { limit = 6 } = req.query;
+
+        const currentVideo = await Video.findById(id);
+
+        if (!currentVideo) {
+            return res.status(404).json({
+                success: false,
+                message: 'Video not found'
+            });
+        }
+
+        // Find videos with same subject, unit, or year (excluding current video)
+        const relatedVideos = await Video.find({
+            _id: { $ne: id },
+            isPublic: true,
+            isApproved: true,
+            $or: [
+                { subject: currentVideo.subject, unit: currentVideo.unit },
+                { subject: currentVideo.subject, year: currentVideo.year },
+                { subject: currentVideo.subject }
+            ]
+        })
+            .populate('uploadedBy', 'name picture')
+            .select('-transcript')
+            .limit(parseInt(limit))
+            .sort({ views: -1 });
+
+        res.status(200).json({
+            success: true,
+            data: relatedVideos
+        });
+    } catch (error) {
+        console.error('Error fetching related videos:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching related videos',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Increment share count
+ */
+export const incrementShareCount = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const video = await Video.findByIdAndUpdate(
+            id,
+            { $inc: { shares: 1 } },
+            { new: true }
+        );
+
+        if (!video) {
+            return res.status(404).json({
+                success: false,
+                message: 'Video not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Share count updated',
+            data: {
+                shares: video.shares
+            }
+        });
+    } catch (error) {
+        console.error('Error incrementing share count:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error incrementing share count',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Add or update video chapters
+ */
+export const updateChapters = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { chapters } = req.body;
+
+        const video = await Video.findById(id);
+
+        if (!video) {
+            return res.status(404).json({
+                success: false,
+                message: 'Video not found'
+            });
+        }
+
+        // Check if user is the owner
+        if (video.uploadedBy.toString() !== req.userId.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: 'You do not have permission to update this video'
+            });
+        }
+
+        video.chapters = chapters;
+        await video.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Chapters updated successfully',
+            data: video.chapters
+        });
+    } catch (error) {
+        console.error('Error updating chapters:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error updating chapters',
+            error: error.message
+        });
+    }
+};

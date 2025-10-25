@@ -6,6 +6,11 @@ import { BackgroundGradient } from '../components/ui/background-gradient';
 import { Button } from '../components/ui/button';
 import { CommentSection } from '../components/comment/CommentSection';
 import { AIChatbot } from '../components/ai/AIChatbot';
+import { EnhancedVideoPlayer } from '../components/video/EnhancedVideoPlayer';
+import { RelatedVideos } from '../components/video/RelatedVideos';
+import { ShareButton } from '../components/video/ShareButton';
+import { VideoNotes } from '../components/video/VideoNotes';
+import { VideoActions } from '../components/video/VideoActions';
 import { formatDate, formatViews } from '../lib/utils';
 import { 
   Play, 
@@ -26,6 +31,7 @@ export const VideoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
+  const [currentVideoTime, setCurrentVideoTime] = useState(0);
 
   const { data: video, isLoading, error, refetch } = useQuery({
     queryKey: ['video', id],
@@ -106,16 +112,13 @@ export const VideoPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
             >
               <BackgroundGradient className="p-0 overflow-hidden">
-                <div className="relative aspect-video bg-black">
-                  <video
-                    controls
-                    className="w-full h-full"
-                    poster={video.thumbnailUrl}
-                    src={video.videoUrl}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
+                <EnhancedVideoPlayer
+                  videoUrl={video.videoUrl}
+                  thumbnailUrl={video.thumbnailUrl}
+                  videoId={id!}
+                  chapters={video.chapters || []}
+                  onTimeUpdate={setCurrentVideoTime}
+                />
               </BackgroundGradient>
             </motion.div>
 
@@ -175,7 +178,7 @@ export const VideoPage: React.FC = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 mb-6">
+                <div className="flex flex-wrap gap-3 mb-6">
                   <Button
                     onClick={handleLike}
                     variant={isLiked ? 'default' : 'outline'}
@@ -185,6 +188,10 @@ export const VideoPage: React.FC = () => {
                     <Heart size={16} className={isLiked ? 'fill-current' : ''} />
                     {isLiked ? 'Liked' : 'Like'}
                   </Button>
+                  
+                  <VideoActions videoId={id!} />
+                  <ShareButton videoId={id!} title={video.title} />
+                  <VideoNotes videoId={id!} currentTime={currentVideoTime} />
                 </div>
 
                 {/* Description */}
@@ -381,10 +388,25 @@ export const VideoPage: React.FC = () => {
                     <span className="font-semibold">{video.documents?.length || 0}</span>
                   </div>
                   <div className="flex justify-between">
+                    <span className="text-gray-400">Shares</span>
+                    <span className="font-semibold">{video.shares || 0}</span>
+                  </div>
+                  <div className="flex justify-between">
                     <span className="text-gray-400">Uploaded</span>
                     <span className="font-semibold text-xs sm:text-sm">{formatDate(video.createdAt)}</span>
                   </div>
                 </div>
+              </BackgroundGradient>
+            </motion.div>
+
+            {/* Related Videos */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <BackgroundGradient className="p-4 sm:p-6">
+                <RelatedVideos videoId={id!} limit={6} />
               </BackgroundGradient>
             </motion.div>
           </div>

@@ -9,7 +9,10 @@ import {
     getMyVideos,
     updateTranscription,
     getTranscript,
-    getAllSubjects
+    getAllSubjects,
+    getRelatedVideos,
+    incrementShareCount,
+    updateChapters
 } from '../controllers/video.controller.js';
 import { authenticate } from '../middleware/auth.js';
 import { uploadVideoComplete, handleUploadError, uploadTranscript } from '../middleware/upload.js';
@@ -26,9 +29,12 @@ router.get('/user/my-videos', authenticate, getMyVideos);
 
 // Dynamic ID routes (these must come AFTER specific routes)
 router.get('/:id', authenticate, getVideoById);
+router.get('/:id/related', authenticate, getRelatedVideos);
 router.put('/:id', authenticate, updateVideo);
 router.delete('/:id', authenticate, deleteVideo);
 router.post('/:id/like', authenticate, toggleLike);
+router.post('/:id/share', authenticate, incrementShareCount);
+router.put('/:id/chapters', authenticate, updateChapters);
 router.get('/:id/transcript', authenticate, getTranscript);
 router.put('/:id/transcript', authenticate, uploadTranscript, updateTranscription);
 

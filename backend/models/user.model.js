@@ -38,6 +38,38 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Playlist'
     }],
+    // Social Features
+    followers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    following: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    // Watch Features
+    bookmarks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Video'
+    }],
+    watchLater: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Video'
+    }],
+    watchHistory: [{
+        video: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Video'
+        },
+        lastWatchedPosition: {
+            type: Number, // in seconds
+            default: 0
+        },
+        lastWatchedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     isActive: {
         type: Boolean,
         default: true

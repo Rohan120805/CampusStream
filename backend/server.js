@@ -26,6 +26,8 @@ import videoRoutes from './routes/video.route.js';
 import playlistRoutes from './routes/playlist.route.js';
 import commentRoutes from './routes/comment.route.js';
 import aiRoutes from './routes/ai.route.js';
+import userRoutes from './routes/user.route.js';
+import noteRoutes from './routes/note.route.js';
 // Import and initialize GCS after env is loaded
 import './config/gcs.js';
 
@@ -46,6 +48,8 @@ app.use('/api/videos', videoRoutes);
 app.use('/api/playlists', playlistRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/notes', noteRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

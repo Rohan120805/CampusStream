@@ -11,6 +11,8 @@ import { PlaylistsPage } from './pages/PlaylistsPage';
 import { PlaylistDetailPage } from './pages/PlaylistDetailPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { MyVideosPage } from './pages/MyVideosPage';
+import { BookmarksPage } from './pages/BookmarksPage';
+import { WatchLaterPage } from './pages/WatchLaterPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 const queryClient = new QueryClient({
@@ -102,6 +104,22 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <MyVideosPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bookmarks"
+        element={
+          <ProtectedRoute>
+            <BookmarksPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/watch-later"
+        element={
+          <ProtectedRoute>
+            <WatchLaterPage />
           </ProtectedRoute>
         }
       />

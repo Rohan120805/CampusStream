@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '../ui/button';
 import { LogoutButton } from '../auth/LoginButton';
-import { Menu, X, Home, List, Upload, Video } from 'lucide-react';
+import { Menu, X, Home, List, Upload, Video, Bookmark, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar: React.FC = () => {
@@ -16,6 +16,8 @@ export const Navbar: React.FC = () => {
     { to: '/home', label: 'Home', icon: Home },
     { to: '/playlists', label: 'Playlists', icon: List },
     { to: '/my-videos', label: 'My Videos', icon: Video },
+    { to: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
+    { to: '/watch-later', label: 'Watch Later', icon: Clock },
     { to: '/upload', label: 'Upload', icon: Upload },
   ];
 

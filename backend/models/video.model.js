@@ -106,6 +106,34 @@ const videoSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    // Video Chapters/Timestamps
+    chapters: [{
+        title: {
+            type: String,
+            required: true
+        },
+        timestamp: {
+            type: Number, // in seconds
+            required: true
+        },
+        description: {
+            type: String,
+            default: ''
+        }
+    }],
+    // User Engagement
+    bookmarkedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    watchLaterBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    shares: {
+        type: Number,
+        default: 0
+    },
     isPublic: {
         type: Boolean,
         default: true
