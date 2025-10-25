@@ -7,10 +7,42 @@ import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
 
 export const LandingPage: React.FC = () => {
-  const { loginWithRedirect, isAuthenticated, error } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, error, logout } = useAuth0();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [authError, setAuthError] = React.useState<string | null>(null);
+
+  // Handle login with fresh prompt
+  const handleLogin = async () => {
+    try {
+      // Clear any existing Auth0 session first
+      await logout({ 
+        logoutParams: { 
+          returnTo: window.location.origin 
+        },
+        openUrl: false // Don't redirect, just clear session
+      });
+      
+      // Small delay to ensure logout completes
+      setTimeout(() => {
+        loginWithRedirect({
+          authorizationParams: {
+            prompt: 'login', // Force login prompt even if user has session
+            screen_hint: 'login' // Show login screen
+          }
+        });
+      }, 100);
+    } catch (err) {
+      console.error('Login error:', err);
+      // Fallback: just try to login
+      loginWithRedirect({
+        authorizationParams: {
+          prompt: 'login',
+          screen_hint: 'login'
+        }
+      });
+    }
+  };
 
   React.useEffect(() => {
     if (isAuthenticated) {
@@ -177,6 +209,25 @@ export const LandingPage: React.FC = () => {
                           </p>
                         </div>
                       )}
+                      <div className="mt-4 flex gap-3">
+                        <Button
+                          onClick={handleLogin}
+                          size="sm"
+                          className="flex-1"
+                        >
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          Try Again with Different Email
+                        </Button>
+                        <Button
+                          onClick={() => setAuthError(null)}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Dismiss
+                        </Button>
+                      </div>
                     </div>
                     <button
                       onClick={() => setAuthError(null)}
@@ -199,7 +250,7 @@ export const LandingPage: React.FC = () => {
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Button
-                onClick={() => loginWithRedirect()}
+                onClick={handleLogin}
                 size="lg"
                 className="text-lg px-10 py-6 group relative overflow-hidden shadow-2xl shadow-purple-500/50"
               >
@@ -349,7 +400,7 @@ export const LandingPage: React.FC = () => {
               their studies
             </p>
             <Button
-              onClick={() => loginWithRedirect()}
+              onClick={handleLogin}
               size="lg"
               className="text-lg px-12 py-6"
             >
