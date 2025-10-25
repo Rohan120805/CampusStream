@@ -23,7 +23,24 @@ const queryClient = new QueryClient({
 });
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  // Show loading spinner while Auth0 is checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <div className="relative inline-block">
+            <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 bg-purple-500 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          <p className="text-gray-400 mt-4">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Routes>
@@ -109,6 +126,8 @@ function App() {
         audience: audience,
         scope: "openid profile email"
       }}
+      cacheLocation="localstorage"
+      useRefreshTokens={true}
       onRedirectCallback={(appState) => {
         // Handle redirect after login, preserving any error parameters
         window.history.replaceState(

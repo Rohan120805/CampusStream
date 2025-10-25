@@ -525,3 +525,30 @@ export const getTranscript = async (req, res) => {
         });
     }
 };
+
+/**
+ * Get all unique subjects from videos in the database
+ */
+export const getAllSubjects = async (req, res) => {
+    try {
+        const subjects = await Video.distinct('subject', { 
+            isPublic: true, 
+            isApproved: true 
+        });
+        
+        // Sort subjects alphabetically
+        const sortedSubjects = subjects.filter(s => s && s.trim()).sort();
+        
+        res.status(200).json({
+            success: true,
+            data: sortedSubjects
+        });
+    } catch (error) {
+        console.error('Error fetching subjects:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching subjects',
+            error: error.message
+        });
+    }
+};

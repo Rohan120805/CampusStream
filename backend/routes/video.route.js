@@ -8,20 +8,24 @@ import {
     toggleLike,
     getMyVideos,
     updateTranscription,
-    getTranscript
+    getTranscript,
+    getAllSubjects
 } from '../controllers/video.controller.js';
 import { authenticate } from '../middleware/auth.js';
 import { uploadVideoComplete, handleUploadError, uploadTranscript } from '../middleware/upload.js';
 
 const router = express.Router();
 
-// Public routes
+// Public routes (specific routes MUST come before :id route)
 router.get('/', getAllVideos);
-router.get('/:id', authenticate, getVideoById);
+router.get('/subjects/all', getAllSubjects);
 
 // Protected routes
 router.post('/', authenticate, uploadVideoComplete, handleUploadError, uploadVideo);
 router.get('/user/my-videos', authenticate, getMyVideos);
+
+// Dynamic ID routes (these must come AFTER specific routes)
+router.get('/:id', authenticate, getVideoById);
 router.put('/:id', authenticate, updateVideo);
 router.delete('/:id', authenticate, deleteVideo);
 router.post('/:id/like', authenticate, toggleLike);

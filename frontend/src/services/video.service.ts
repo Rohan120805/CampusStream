@@ -1,10 +1,19 @@
 import api from '../lib/api';
+import axios from 'axios';
 import { Video, VideoFilters } from '../types';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 export const videoService = {
   getAllVideos: async (params?: VideoFilters) => {
     const { data } = await api.get('/videos', { params });
     return data;
+  },
+
+  getAllSubjects: async (): Promise<string[]> => {
+    // Use axios directly to bypass auth interceptor for public endpoint
+    const { data } = await axios.get(`${API_URL}/videos/subjects/all`);
+    return data.data;
   },
 
   getVideoById: async (id: string): Promise<Video> => {

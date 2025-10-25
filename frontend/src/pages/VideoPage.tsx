@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { videoService } from '../services/video.service';
 import { BackgroundGradient } from '../components/ui/background-gradient';
 import { Button } from '../components/ui/button';
+import { CommentSection } from '../components/comment/CommentSection';
+import { AIChatbot } from '../components/ai/AIChatbot';
 import { formatDate, formatViews } from '../lib/utils';
 import { 
   Play, 
@@ -387,6 +389,19 @@ export const VideoPage: React.FC = () => {
             </motion.div>
           </div>
         </div>
+
+        {/* Comment Section - Full Width Below */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-6"
+        >
+          <CommentSection videoId={id!} />
+        </motion.div>
+
+        {/* AI Chatbot */}
+        <AIChatbot videoId={id!} />
       </div>
     </div>
   );

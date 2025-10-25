@@ -44,17 +44,24 @@ export const HomePage: React.FC = () => {
     queryFn: () => videoService.getAllVideos(filters),
   });
 
-  const subjects = [
-    'Mathematics',
-    'Physics',
-    'Chemistry',
-    'Computer Science',
-    'Biology',
-    'English',
-    'History',
-  ];
+  // Fetch all subjects dynamically from the database
+  const { data: subjectsData, isLoading: isLoadingSubjects, error: subjectsError } = useQuery({
+    queryKey: ['subjects'],
+    queryFn: () => videoService.getAllSubjects(),
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
 
+  const subjects = subjectsData || [];
   const semesters = ['1', '2'];
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log('📚 Subjects data:', subjects);
+    console.log('⏳ Loading subjects:', isLoadingSubjects);
+    if (subjectsError) {
+      console.error('❌ Subjects error:', subjectsError);
+    }
+  }, [subjects, isLoadingSubjects, subjectsError]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

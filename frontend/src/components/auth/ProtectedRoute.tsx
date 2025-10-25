@@ -12,13 +12,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   useEffect(() => {
     const saveToken = async () => {
-      if (isAuthenticated) {
+      if (isAuthenticated && !isLoading) {
         try {
           console.log('🔄 Requesting Auth0 access token...');
           const token = await getAccessTokenSilently({
             authorizationParams: {
               audience: process.env.REACT_APP_AUTH0_AUDIENCE,
             },
+            cacheMode: 'on', // Use cached token if available
           });
           localStorage.setItem('auth0_token', token);
           console.log('✅ Auth0 token obtained and stored');
@@ -27,7 +28,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
           console.error('❌ Error getting token:', error);
           // Try without audience as fallback
           try {
-            const token = await getAccessTokenSilently();
+            const token = await getAccessTokenSilently({
+              cacheMode: 'on',
+            });
             localStorage.setItem('auth0_token', token);
             console.log('✅ Token obtained (no audience)');
             setTokenReady(true);
@@ -39,7 +42,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       }
     };
     saveToken();
-  }, [isAuthenticated, getAccessTokenSilently]);
+  }, [isAuthenticated, isLoading, getAccessTokenSilently]);
 
   if (isLoading) {
     return (
