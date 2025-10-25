@@ -132,6 +132,9 @@ function App() {
   const domain = process.env.REACT_APP_AUTH0_DOMAIN || '';
   const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID || '';
   const audience = process.env.REACT_APP_AUTH0_AUDIENCE || '';
+  
+  // Get the correct redirect URI
+  const redirectUri = process.env.REACT_APP_AUTH0_REDIRECT_URI || window.location.origin;
 
   if (!domain || !clientId) {
     return (
@@ -149,7 +152,7 @@ function App() {
       domain={domain}
       clientId={clientId}
       authorizationParams={{
-        redirect_uri: window.location.origin,
+        redirect_uri: redirectUri,
         audience: audience,
         scope: "openid profile email"
       }}

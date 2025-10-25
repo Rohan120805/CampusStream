@@ -1,6 +1,22 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Determine API URL based on environment
+const getApiUrl = () => {
+  // If explicitly set in env, use it
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  
+  // In production (on Vercel), use relative path
+  if (process.env.NODE_ENV === 'production') {
+    return '/api';
+  }
+  
+  // In development, use localhost
+  return 'http://localhost:5000/api';
+};
+
+const API_URL = getApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL,

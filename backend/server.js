@@ -35,8 +35,23 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+const allowedOrigins = [
+    'http://localhost:3000',
+    process.env.FRONTEND_URL,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: function(origin, callback) {
+        // Allow requests with no origin (mobile apps, Postman, etc.)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.some(allowed => origin.startsWith(allowed.replace('*', '')))) {
+            callback(null, true);
+        } else {
+            callback(null, true); // In production, you might want to be more restrictive
+        }
+    },
     credentials: true
 }));
 app.use(express.json());
@@ -65,8 +80,15 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start server
-app.listen(PORT, () => {
-    connectDB();
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Connect to database
+connectDB();
+
+// Start server (only in non-serverless environment)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
+
+// Export for Vercel serverless
+export default app;

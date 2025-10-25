@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 // Check if GCS credentials are configured
-const isGCSConfigured = process.env.GCS_KEY_FILE && 
+const isGCSConfigured = (process.env.GCS_KEY_FILE || process.env.GCS_CREDENTIALS) && 
                         process.env.GCS_PROJECT_ID && 
                         process.env.GCS_BUCKET_NAME;
 
@@ -20,18 +20,44 @@ let bucket = null;
 
 // Initialize Google Cloud Storage only if configured
 if (isGCSConfigured) {
-    const keyFilePath = path.join(__dirname, '../../', process.env.GCS_KEY_FILE);
-    
-    // Check if key file exists
-    if (fs.existsSync(keyFilePath)) {
-        storage = new Storage({
-            projectId: process.env.GCS_PROJECT_ID,
-            keyFilename: keyFilePath
-        });
-        bucket = storage.bucket(process.env.GCS_BUCKET_NAME);
-        console.log('✅ Google Cloud Storage initialized');
-    } else {
-        console.warn('⚠️  GCS key file not found. File uploads will not work.');
+    try {
+        let credentials;
+        
+        // Check if GCS_CREDENTIALS is provided (for Vercel deployment)
+        if (process.env.GCS_CREDENTIALS) {
+            try {
+                credentials = JSON.parse(process.env.GCS_CREDENTIALS);
+                storage = new Storage({
+                    projectId: process.env.GCS_PROJECT_ID,
+                    credentials: credentials
+                });
+                console.log('✅ Google Cloud Storage initialized from GCS_CREDENTIALS');
+            } catch (parseError) {
+                console.error('❌ Failed to parse GCS_CREDENTIALS:', parseError.message);
+            }
+        } 
+        // Fallback to key file (for local development)
+        else if (process.env.GCS_KEY_FILE) {
+            const keyFilePath = path.join(__dirname, '../../', process.env.GCS_KEY_FILE);
+            
+            if (fs.existsSync(keyFilePath)) {
+                storage = new Storage({
+                    projectId: process.env.GCS_PROJECT_ID,
+                    keyFilename: keyFilePath
+                });
+                console.log('✅ Google Cloud Storage initialized from key file');
+            } else {
+                console.warn('⚠️  GCS key file not found:', keyFilePath);
+            }
+        }
+        
+        if (storage) {
+            bucket = storage.bucket(process.env.GCS_BUCKET_NAME);
+        } else {
+            console.warn('⚠️  Could not initialize GCS storage. File uploads will not work.');
+        }
+    } catch (error) {
+        console.error('❌ Error initializing Google Cloud Storage:', error.message);
     }
 } else {
     console.warn('⚠️  Google Cloud Storage not configured. File uploads will not work.');

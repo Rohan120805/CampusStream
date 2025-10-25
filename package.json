@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon backend/server.js",
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "vercel-build": "echo 'Building for Vercel...'",
+    "deploy": "vercel --prod"
   },
   "type": "module",
   "keywords": [],

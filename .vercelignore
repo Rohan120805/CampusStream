@@ -1,0 +1,13 @@
+node_modules
+.env
+.env.local
+.DS_Store
+*.log
+.vscode
+.idea
+gcs-key.json
+test-gcs.js
+*.md
+frontend/node_modules
+frontend/.env
+frontend/.env.local
