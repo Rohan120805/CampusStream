@@ -56,6 +56,12 @@ export const Navbar: React.FC = () => {
                 Playlists
               </Link>
               <Link
+                to="/my-videos"
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                My Videos
+              </Link>
+              <Link
                 to="/upload"
                 className="text-gray-300 hover:text-white transition-colors"
               >

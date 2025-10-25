@@ -2,9 +2,13 @@ import { Storage } from '@google-cloud/storage';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load environment variables from root .env file
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 // Check if GCS credentials are configured
 const isGCSConfigured = process.env.GCS_KEY_FILE && 

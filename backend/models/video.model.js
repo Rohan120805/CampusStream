@@ -45,9 +45,47 @@ const videoSchema = new mongoose.Schema({
     }],
     semester: {
         type: String,
-        enum: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        enum: ['1', '2'],
         default: '1'
     },
+    year: {
+        type: String,
+        enum: ['1st Year', '2nd Year', '3rd Year', '4th Year'],
+        required: [true, 'Year is required']
+    },
+    unit: {
+        type: String,
+        enum: ['CO1', 'CO2', 'CO3', 'CO4', 'CO5'],
+        required: [true, 'Unit is required'],
+        trim: true
+    },
+    documents: [{
+        name: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        },
+        type: {
+            type: String,
+            enum: ['pdf', 'pptx', 'docx', 'ppt', 'doc'],
+            required: true
+        },
+        size: {
+            type: Number,
+            required: true
+        },
+        fileName: {
+            type: String,
+            required: true
+        },
+        uploadedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     views: {
         type: Number,
         default: 0
@@ -57,6 +95,10 @@ const videoSchema = new mongoose.Schema({
         ref: 'User'
     }],
     transcript: {
+        type: String,
+        default: ''
+    },
+    transcriptUrl: {
         type: String,
         default: ''
     },
@@ -82,6 +124,8 @@ const videoSchema = new mongoose.Schema({
 
 // Indexes for better query performance
 videoSchema.index({ subject: 1, semester: 1 });
+videoSchema.index({ subject: 1, unit: 1 });
+videoSchema.index({ year: 1, semester: 1 });
 videoSchema.index({ uploadedBy: 1 });
 videoSchema.index({ tags: 1 });
 videoSchema.index({ createdAt: -1 });

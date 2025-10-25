@@ -40,6 +40,20 @@ export const videoService = {
     const { data } = await api.get('/videos/user/my-videos');
     return data;
   },
+
+  getTranscript: async (id: string) => {
+    const { data } = await api.get(`/videos/${id}/transcript`);
+    return data;
+  },
+
+  updateTranscription: async (id: string, formData: FormData) => {
+    const { data } = await api.put(`/videos/${id}/transcript`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return data;
+  },
 };
 
 export default videoService;

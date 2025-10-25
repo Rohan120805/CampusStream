@@ -22,18 +22,31 @@ export interface Video {
   duration: number;
   uploadedBy: User;
   subject: string;
+  unit: string;
+  year: string;
   topics: string[];
   tags: string[];
   semester: string;
+  documents: Document[];
   views: number;
   likes: string[];
   transcript?: string;
+  transcriptUrl?: string;
   summary?: string;
   isPublic: boolean;
   isApproved: boolean;
   fileName: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Document {
+  name: string;
+  url: string;
+  type: 'pdf' | 'pptx' | 'docx' | 'ppt' | 'doc';
+  size: number;
+  fileName: string;
+  uploadedAt: string;
 }
 
 export interface Playlist {

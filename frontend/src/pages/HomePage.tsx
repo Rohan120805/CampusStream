@@ -16,6 +16,8 @@ export const HomePage: React.FC = () => {
     search: '',
     subject: '',
     semester: '',
+    unit: '',
+    year: '',
     sortBy: 'createdAt',
     order: 'desc' as 'asc' | 'desc',
   });
@@ -52,7 +54,7 @@ export const HomePage: React.FC = () => {
     'History',
   ];
 
-  const semesters = ['1', '2', '3', '4', '5', '6', '7', '8'];
+  const semesters = ['1', '2'];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -184,6 +186,35 @@ export const HomePage: React.FC = () => {
             </select>
 
             <select
+              value={filters.unit}
+              onChange={(e) =>
+                setFilters({ ...filters, unit: e.target.value })
+              }
+              className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+            >
+              <option value="">All Units</option>
+              <option value="CO1">CO1</option>
+              <option value="CO2">CO2</option>
+              <option value="CO3">CO3</option>
+              <option value="CO4">CO4</option>
+              <option value="CO5">CO5</option>
+            </select>
+
+            <select
+              value={filters.year}
+              onChange={(e) =>
+                setFilters({ ...filters, year: e.target.value })
+              }
+              className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+            >
+              <option value="">All Years</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+
+            <select
               value={filters.semester}
               onChange={(e) =>
                 setFilters({ ...filters, semester: e.target.value })
@@ -219,6 +250,8 @@ export const HomePage: React.FC = () => {
                   search: '',
                   subject: '',
                   semester: '',
+                  unit: '',
+                  year: '',
                   sortBy: 'createdAt',
                   order: 'desc',
                 })
@@ -337,6 +370,25 @@ export const HomePage: React.FC = () => {
                         {video.description}
                       </p>
 
+                      {/* Academic Info */}
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {video.unit && (
+                          <span className="inline-block bg-purple-600/20 text-purple-400 text-xs px-2 py-0.5 rounded">
+                            {video.unit}
+                          </span>
+                        )}
+                        {video.year && (
+                          <span className="inline-block bg-blue-600/20 text-blue-400 text-xs px-2 py-0.5 rounded">
+                            {video.year}
+                          </span>
+                        )}
+                        {video.subject && (
+                          <span className="inline-block bg-green-600/20 text-green-400 text-xs px-2 py-0.5 rounded">
+                            {video.subject}
+                          </span>
+                        )}
+                      </div>
+
                       {/* Meta Info */}
                       <div className="flex items-center justify-between text-xs text-gray-500">
                         <div className="flex items-center space-x-3">
@@ -373,19 +425,31 @@ export const HomePage: React.FC = () => {
                             </svg>
                             {video.likes?.length || 0}
                           </span>
+
+                          {video.documents && video.documents.length > 0 && (
+                            <span className="flex items-center text-green-400" title="Documents available">
+                              <svg
+                                className="w-4 h-4 mr-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
+                              </svg>
+                              {video.documents.length}
+                            </span>
+                          )}
                         </div>
 
                         <span>{formatDate(video.createdAt)}</span>
                       </div>
 
-                      {/* Tags */}
-                      {video.subject && (
-                        <div className="mt-3">
-                          <span className="inline-block bg-purple-600/20 text-purple-400 text-xs px-2 py-1 rounded">
-                            {video.subject}
-                          </span>
-                        </div>
-                      )}
+                      {/* Remove old subject tag since it's now shown above */}
                     </div>
                   </div>
                 </BackgroundGradient>

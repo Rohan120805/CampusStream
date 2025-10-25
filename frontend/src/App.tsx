@@ -5,6 +5,11 @@ import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { Navbar } from './components/layout/Navbar';
 import { LandingPage } from './pages/LandingPage';
 import { HomePage } from './pages/HomePage';
+import { UploadPage } from './pages/UploadPage';
+import { VideoPage } from './pages/VideoPage';
+import { PlaylistsPage } from './pages/PlaylistsPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { MyVideosPage } from './pages/MyVideosPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 const queryClient = new QueryClient({
@@ -31,6 +36,46 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/upload"
+        element={
+          <ProtectedRoute>
+            <UploadPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/video/:id"
+        element={
+          <ProtectedRoute>
+            <VideoPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/playlists"
+        element={
+          <ProtectedRoute>
+            <PlaylistsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-videos"
+        element={
+          <ProtectedRoute>
+            <MyVideosPage />
           </ProtectedRoute>
         }
       />
