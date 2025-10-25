@@ -64,12 +64,23 @@ export const authenticate = async (req, res, next) => {
                 }
 
                 try {
+                    // Extract email from token
+                    const email = decoded.email || decoded[`${process.env.AUTH0_AUDIENCE}/email`];
+                    
+                    // Verify organization email domain
+                    if (!email || !email.endsWith('@klh.edu.in')) {
+                        console.log('❌ Unauthorized domain:', email);
+                        return res.status(403).json({ 
+                            success: false, 
+                            message: 'Access restricted to @klh.edu.in email addresses only' 
+                        });
+                    }
+                    
                     // Find or create user
                     let user = await User.findOne({ auth0Id: decoded.sub });
 
                     if (!user) {
                         // Auto-create user on first login - everyone is a regular user
-                        const email = decoded.email || decoded[`${process.env.AUTH0_AUDIENCE}/email`];
                         const name = decoded.name || decoded[`${process.env.AUTH0_AUDIENCE}/name`] || email?.split('@')[0];
                         const picture = decoded.picture || decoded[`${process.env.AUTH0_AUDIENCE}/picture`] || '';
 

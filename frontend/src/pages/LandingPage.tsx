@@ -1,20 +1,42 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Sparkles } from '../components/ui/sparkles';
 import { BackgroundGradient } from '../components/ui/background-gradient';
 import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
 
 export const LandingPage: React.FC = () => {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, error } = useAuth0();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [authError, setAuthError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (isAuthenticated) {
       navigate('/home');
     }
-  }, [isAuthenticated, navigate]);
+
+    // Check for Auth0 error in URL parameters
+    const errorParam = searchParams.get('error');
+    const errorDescription = searchParams.get('error_description');
+
+    if (errorParam) {
+      if (errorParam === 'unauthorized' || errorParam === 'access_denied') {
+        setAuthError(
+          errorDescription || 
+          'Access restricted to @klh.edu.in email addresses only. Please use your institutional email to login.'
+        );
+      } else {
+        setAuthError(errorDescription || 'Authentication failed. Please try again.');
+      }
+    }
+
+    // Check for Auth0 React error
+    if (error) {
+      setAuthError(error.message || 'Authentication error occurred');
+    }
+  }, [isAuthenticated, navigate, searchParams, error]);
 
   const features = [
     {
@@ -114,6 +136,60 @@ export const LandingPage: React.FC = () => {
                 Stream, Learn, Excel
               </span>
             </motion.p>
+
+            {/* Error Alert */}
+            {authError && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="mb-8 max-w-2xl mx-auto"
+              >
+                <div className="bg-red-500/10 border-2 border-red-500/50 rounded-2xl p-6 backdrop-blur-sm">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <svg
+                        className="w-6 h-6 text-red-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-red-400 mb-2">
+                        Access restricted to @klh.edu.in email addresses only. Please use your institutional email to login.
+                      </h3>
+                      <p className="text-red-200 text-sm leading-relaxed">
+                        {authError}
+                      </p>
+                      {authError.includes('@klh.edu.in') && (
+                        <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                          <p className="text-blue-300 text-sm flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                            </svg>
+                            <span>This platform is exclusively for KLH students and faculty.</span>
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setAuthError(null)}
+                      className="flex-shrink-0 text-red-400 hover:text-red-300 transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
 
             {/* CTA Buttons */}
             <motion.div

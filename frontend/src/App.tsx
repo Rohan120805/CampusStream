@@ -64,6 +64,14 @@ function App() {
         audience: audience,
         scope: "openid profile email"
       }}
+      onRedirectCallback={(appState) => {
+        // Handle redirect after login, preserving any error parameters
+        window.history.replaceState(
+          {},
+          document.title,
+          appState?.returnTo || window.location.pathname
+        );
+      }}
     >
       <QueryClientProvider client={queryClient}>
         <Router>
