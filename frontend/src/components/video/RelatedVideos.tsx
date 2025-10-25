@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { videoService } from '../../services/video.service';
 import { motion } from 'framer-motion';
-import { Play, Eye, Heart, Clock } from 'lucide-react';
+import { Play, Eye, Heart } from 'lucide-react';
 import { formatDuration, formatViews } from '../../lib/utils';
 
 interface RelatedVideosProps {

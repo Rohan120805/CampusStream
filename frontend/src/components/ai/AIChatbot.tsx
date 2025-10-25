@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { aiService, ChatMessage, QuizQuestion } from '../../services/ai.service';
 import { BackgroundGradient } from '../ui/background-gradient';
-import { Button } from '../ui/button';
 import { 
   MessageCircle, 
   Send, 
