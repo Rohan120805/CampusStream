@@ -6,7 +6,6 @@ import {
   BookOpen, 
   GraduationCap, 
   Video, 
-  Clock,
   Eye,
   Calendar,
   ArrowLeft,
@@ -15,7 +14,7 @@ import {
 import { formatDate, formatViews } from '../lib/utils';
 
 export const PlaylistDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id: _id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
   const playlist = location.state?.playlist;

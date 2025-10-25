@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { playlistService } from '../services/playlist.service';
 import { motion } from 'framer-motion';
-import { PlayCircle, BookOpen, GraduationCap, Video, Clock } from 'lucide-react';
+import { PlayCircle, BookOpen, GraduationCap, Video } from 'lucide-react';
 
 export const PlaylistsPage: React.FC = () => {
   const navigate = useNavigate();

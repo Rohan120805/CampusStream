@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { videoService } from '../services/video.service';
 import { BackgroundGradient } from '../components/ui/background-gradient';
 import { Button } from '../components/ui/button';
-import { formatDate, formatViews } from '../lib/utils';
+import { formatDate } from '../lib/utils';
 import { 
   Play, 
   Eye, 

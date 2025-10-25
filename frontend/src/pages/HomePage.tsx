@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
 import { videoService } from '../services/video.service';
@@ -51,7 +51,7 @@ export const HomePage: React.FC = () => {
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
-  const subjects = subjectsData || [];
+  const subjects = useMemo(() => subjectsData || [], [subjectsData]);
   const semesters = ['1', '2'];
 
   // Debug logging
