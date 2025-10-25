@@ -17,6 +17,28 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Scrollbar styles
+const scrollbarStyles = `
+  .chat-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .chat-scroll::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 3px;
+  }
+  .chat-scroll::-webkit-scrollbar-thumb {
+    background: #7c3aed;
+    border-radius: 3px;
+  }
+  .chat-scroll::-webkit-scrollbar-thumb:hover {
+    background: #9333ea;
+  }
+  .chat-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #7c3aed #1e293b;
+  }
+`;
+
 interface AIChatbotProps {
   videoId: string;
 }
@@ -38,6 +60,32 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({ videoId }) => {
   const [quizState, setQuizState] = useState<QuizState | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Simple markdown renderer
+  const renderMarkdown = (text: string) => {
+    let html = text;
+    
+    // Bold: **text** or __text__
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-purple-300">$1</strong>');
+    html = html.replace(/__(.*?)__/g, '<strong class="font-semibold text-purple-300">$1</strong>');
+    
+    // Italic: *text* or _text_
+    html = html.replace(/\*(.*?)\*/g, '<em class="italic text-blue-300">$1</em>');
+    html = html.replace(/_(.*?)_/g, '<em class="italic text-blue-300">$1</em>');
+    
+    // Inline code: `code`
+    html = html.replace(/`([^`]+)`/g, '<code class="bg-slate-900 px-1 py-0.5 rounded text-xs text-green-300">$1</code>');
+    
+    // Headers
+    html = html.replace(/^### (.*$)/gm, '<h3 class="text-sm font-bold mb-1 mt-2">$1</h3>');
+    html = html.replace(/^## (.*$)/gm, '<h2 class="text-base font-bold mb-2 mt-2">$1</h2>');
+    html = html.replace(/^# (.*$)/gm, '<h1 class="text-lg font-bold mb-2 mt-2">$1</h1>');
+    
+    // Line breaks
+    html = html.replace(/\n/g, '<br/>');
+    
+    return html;
+  };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -56,6 +104,14 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({ videoId }) => {
         { role: 'assistant', content: data.message },
       ]);
     },
+    onError: (error: any) => {
+      console.error('Chat error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to get AI response. Please try again.';
+      setConversation((prev) => [
+        ...prev,
+        { role: 'assistant', content: `❌ Error: ${errorMessage}` },
+      ]);
+    },
   });
 
   // Quiz mutation
@@ -71,6 +127,14 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({ videoId }) => {
       });
       setShowQuiz(true);
     },
+    onError: (error: any) => {
+      console.error('Quiz generation error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to generate quiz. Please try again.';
+      setConversation((prev) => [
+        ...prev,
+        { role: 'assistant', content: `❌ Error: ${errorMessage}` },
+      ]);
+    },
   });
 
   // Summary mutation
@@ -80,6 +144,14 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({ videoId }) => {
       setConversation((prev) => [
         ...prev,
         { role: 'assistant', content: data.summary },
+      ]);
+    },
+    onError: (error: any) => {
+      console.error('Summary generation error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to generate summary. Please try again.';
+      setConversation((prev) => [
+        ...prev,
+        { role: 'assistant', content: `❌ Error: ${errorMessage}` },
       ]);
     },
   });
@@ -175,6 +247,7 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({ videoId }) => {
 
   return (
     <AnimatePresence>
+      <style>{scrollbarStyles}</style>
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -250,7 +323,13 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({ videoId }) => {
               )}
 
               {/* Messages or Quiz */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div 
+                className="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll" 
+                style={{ 
+                  maxHeight: 'calc(600px - 180px)',
+                  scrollBehavior: 'smooth'
+                }}
+              >
                 {showQuiz && quizState ? (
                   <div className="space-y-4">
                     {!quizState.showResults ? (
@@ -337,7 +416,14 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({ videoId }) => {
                               : 'bg-slate-800 text-gray-200'
                           }`}
                         >
-                          <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                          {msg.role === 'assistant' ? (
+                            <div 
+                              className="text-sm prose prose-invert prose-sm max-w-none"
+                              dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }}
+                            />
+                          ) : (
+                            <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                          )}
                         </div>
                       </motion.div>
                     ))}

@@ -1,13 +1,14 @@
 import express from 'express';
-import { 
-    createPlaylist, 
-    getAllPlaylists, 
-    getPlaylistById, 
-    updatePlaylist, 
+import {
+    createPlaylist,
+    getAllPlaylists,
+    getPlaylistById,
+    updatePlaylist,
     deletePlaylist,
     addVideoToPlaylist,
     removeVideoFromPlaylist,
-    getMyPlaylists
+    getMyPlaylists,
+    getPlaylistsBySubject
 } from '../controllers/playlist.controller.js';
 import { authenticate } from '../middleware/auth.js';
 
@@ -15,7 +16,8 @@ const router = express.Router();
 
 // Public routes
 router.get('/', getAllPlaylists);
-router.get('/:id', authenticate, getPlaylistById);
+router.get('/by-subject', getPlaylistsBySubject);
+router.get('/:id', getPlaylistById);
 
 // Protected routes
 router.post('/', authenticate, createPlaylist);

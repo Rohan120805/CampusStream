@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize Gemini AI
+// Initialize Gemini AI with API version v1
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Initialize Google Cloud Storage
@@ -72,14 +72,28 @@ const buildContext = async (video) => {
  */
 export const chatWithVideo = async (req, res) => {
     try {
+        console.log('🤖 AI Chat Request:', { videoId: req.body.videoId, message: req.body.message?.substring(0, 50) + '...' });
+        
         const { videoId, message, conversationHistory } = req.body;
 
         if (!message || !videoId) {
+            console.log('❌ Missing required fields');
             return res.status(400).json({
                 success: false,
                 message: 'Video ID and message are required'
             });
         }
+        
+        // Check if GEMINI_API_KEY is available
+        if (!process.env.GEMINI_API_KEY) {
+            console.error('❌ GEMINI_API_KEY not found in environment variables!');
+            return res.status(500).json({
+                success: false,
+                message: 'AI service is not properly configured. Please contact administrator.'
+            });
+        }
+        
+        console.log('✅ GEMINI_API_KEY is configured');
 
         // Fetch video with all details
         const video = await Video.findById(videoId)
@@ -95,8 +109,8 @@ export const chatWithVideo = async (req, res) => {
         // Build context from video data
         const context = await buildContext(video);
 
-        // Initialize Gemini model
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        // Initialize Gemini model (using basic flash model)
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
         // Build conversation with context
         let prompt = `You are an AI teaching assistant for CampusStream, an educational video platform. You have access to the following lecture information:\n\n${context}\n\n`;
@@ -119,9 +133,12 @@ export const chatWithVideo = async (req, res) => {
         prompt += `Student: ${message}\nAI:`;
 
         // Generate response
+        console.log('🚀 Generating AI response...');
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const aiMessage = response.text();
+        
+        console.log('✅ AI response generated successfully');
 
         res.status(200).json({
             success: true,
@@ -135,10 +152,14 @@ export const chatWithVideo = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('Error in chat:', error);
+        console.error('❌ Error in AI chat:', error);
+        console.error('   Error name:', error.name);
+        console.error('   Error message:', error.message);
+        console.error('   Error stack:', error.stack);
+        
         res.status(500).json({
             success: false,
-            message: 'Error processing chat message',
+            message: 'Error processing chat message: ' + error.message,
             error: error.message
         });
     }
@@ -149,12 +170,23 @@ export const chatWithVideo = async (req, res) => {
  */
 export const generateQuiz = async (req, res) => {
     try {
+        console.log('📝 Quiz Generation Request:', { videoId: req.body.videoId, difficulty: req.body.difficulty, count: req.body.questionCount });
+        
         const { videoId, difficulty = 'medium', questionCount = 5 } = req.body;
 
         if (!videoId) {
             return res.status(400).json({
                 success: false,
                 message: 'Video ID is required'
+            });
+        }
+        
+        // Check if GEMINI_API_KEY is available
+        if (!process.env.GEMINI_API_KEY) {
+            console.error('❌ GEMINI_API_KEY not found in environment variables!');
+            return res.status(500).json({
+                success: false,
+                message: 'AI service is not properly configured. Please contact administrator.'
             });
         }
 
@@ -178,8 +210,8 @@ export const generateQuiz = async (req, res) => {
         // Build context
         const context = await buildContext(video);
 
-        // Initialize Gemini model
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        // Initialize Gemini model (using basic flash model)
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
         const prompt = `Based on the following lecture content, generate ${questionCount} multiple-choice quiz questions at ${difficulty} difficulty level.
 
@@ -252,12 +284,23 @@ Return ONLY valid JSON, no additional text.`;
  */
 export const getLectureSummary = async (req, res) => {
     try {
+        console.log('📚 Summary Request:', { videoId: req.query.videoId, summaryType: req.query.summaryType });
+        
         const { videoId, summaryType = 'brief' } = req.query;
 
         if (!videoId) {
             return res.status(400).json({
                 success: false,
                 message: 'Video ID is required'
+            });
+        }
+        
+        // Check if GEMINI_API_KEY is available
+        if (!process.env.GEMINI_API_KEY) {
+            console.error('❌ GEMINI_API_KEY not found in environment variables!');
+            return res.status(500).json({
+                success: false,
+                message: 'AI service is not properly configured. Please contact administrator.'
             });
         }
 
@@ -291,7 +334,7 @@ export const getLectureSummary = async (req, res) => {
 
         // Generate new summary
         const context = await buildContext(video);
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
         let prompt = '';
         if (summaryType === 'detailed') {

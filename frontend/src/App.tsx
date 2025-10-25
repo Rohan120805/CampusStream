@@ -8,6 +8,7 @@ import { HomePage } from './pages/HomePage';
 import { UploadPage } from './pages/UploadPage';
 import { VideoPage } from './pages/VideoPage';
 import { PlaylistsPage } from './pages/PlaylistsPage';
+import { PlaylistDetailPage } from './pages/PlaylistDetailPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { MyVideosPage } from './pages/MyVideosPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -77,6 +78,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <PlaylistsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/playlists/:id"
+        element={
+          <ProtectedRoute>
+            <PlaylistDetailPage />
           </ProtectedRoute>
         }
       />

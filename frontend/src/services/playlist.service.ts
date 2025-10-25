@@ -12,6 +12,11 @@ export const playlistService = {
     return data.data;
   },
 
+  getPlaylistsBySubject: async () => {
+    const { data } = await api.get('/playlists/by-subject');
+    return data.data;
+  },
+
   getPlaylistById: async (id: string): Promise<Playlist> => {
     const { data } = await api.get(`/playlists/${id}`);
     return data.data;

@@ -112,7 +112,7 @@ export const generateSummary = async (transcript) => {
         
         console.log('🤖 Generating summary using Gemini AI...');
         
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
         
         const prompt = `Please provide a concise summary of the following video transcript. 
 Focus on the main topics, key points, and important concepts discussed.
