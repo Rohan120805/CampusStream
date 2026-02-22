@@ -1,23 +1,11 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Video from '../models/video.model.js';
-import { Storage } from '@google-cloud/storage';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Initialize Gemini AI with API version v1
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Initialize Google Cloud Storage
-const storage = new Storage({
-    keyFilename: path.join(__dirname, '../../', process.env.GCS_KEY_FILE),
-    projectId: process.env.GCS_PROJECT_ID
-});
-
 /**
- * Download document content from GCS
+ * Download document content from Cloudinary (placeholder)
  */
 const getDocumentContent = async (documentUrl) => {
     try {

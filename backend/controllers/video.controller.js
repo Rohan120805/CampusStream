@@ -1,6 +1,6 @@
 import Video from '../models/video.model.js';
 import User from '../models/user.model.js';
-import { uploadToGCS, deleteFromGCS } from '../config/gcs.js';
+import { uploadToCloudinary, deleteFromCloudinary } from '../config/storage.js';
 import { processVideoTranscription } from '../utils/transcriptionService.js';
 import path from 'path';
 
@@ -37,28 +37,27 @@ export const uploadVideo = async (req, res) => {
         const thumbnailFile = req.files.thumbnail ? req.files.thumbnail[0] : null;
         const documentFiles = req.files.documents || [];
 
-        // Generate unique filename
-        const timestamp = Date.now();
-        const videoFileName = `videos/${req.userId}_${timestamp}${path.extname(videoFile.originalname)}`;
-        
-        // Upload video to GCS
-        console.log('📤 Uploading video to GCS...');
-        const videoUrl = await uploadToGCS(
+        // Upload video to Cloudinary
+        console.log('📤 Uploading video to Cloudinary...');
+        const videoUrl = await uploadToCloudinary(
             videoFile.buffer,
-            videoFileName,
-            videoFile.mimetype
+            'videos',
+            'video'
         );
         console.log('✅ Video uploaded:', videoUrl);
+        
+        // Extract filename from Cloudinary URL for reference
+        const timestamp = Date.now();
+        const videoFileName = `videos/${req.userId}_${timestamp}${path.extname(videoFile.originalname)}`;
 
         // Upload thumbnail if provided
         let thumbnailUrl = '';
         if (thumbnailFile) {
-            console.log('📤 Uploading thumbnail to GCS...');
-            const thumbnailFileName = `thumbnails/${req.userId}_${timestamp}${path.extname(thumbnailFile.originalname)}`;
-            thumbnailUrl = await uploadToGCS(
+            console.log('📤 Uploading thumbnail to Cloudinary...');
+            thumbnailUrl = await uploadToCloudinary(
                 thumbnailFile.buffer,
-                thumbnailFileName,
-                thumbnailFile.mimetype
+                'thumbnails',
+                'image'
             );
             console.log('✅ Thumbnail uploaded:', thumbnailUrl);
         }
@@ -66,16 +65,16 @@ export const uploadVideo = async (req, res) => {
         // Upload documents if provided
         const uploadedDocuments = [];
         if (documentFiles.length > 0) {
-            console.log(`📤 Uploading ${documentFiles.length} document(s) to GCS...`);
+            console.log(`📤 Uploading ${documentFiles.length} document(s) to Cloudinary...`);
             
             for (let i = 0; i < documentFiles.length; i++) {
                 const docFile = documentFiles[i];
                 const docFileName = `documents/${req.userId}_${timestamp}_${i}${path.extname(docFile.originalname)}`;
                 
-                const docUrl = await uploadToGCS(
+                const docUrl = await uploadToCloudinary(
                     docFile.buffer,
-                    docFileName,
-                    docFile.mimetype
+                    'documents',
+                    'raw'
                 );
 
                 // Determine file type from mimetype
@@ -127,15 +126,12 @@ export const uploadVideo = async (req, res) => {
 
         console.log('✅ Video document created in MongoDB');
 
-        // Start transcription process in background (non-blocking)
-        console.log('🎬 Starting background transcription process...');
-        processVideoTranscription(video).catch(err => {
-            console.error('⚠️ Background transcription failed:', err);
-        });
+        // Note: Automatic transcription is disabled. Users can manually upload transcripts.
+        console.log('ℹ️ Automatic transcription is disabled. Users can manually upload transcripts via the edit video page.');
 
         res.status(201).json({
             success: true,
-            message: 'Video uploaded successfully. Transcription will be generated in the background.',
+            message: 'Video uploaded successfully. You can add a transcript later.',
             data: video
         });
     } catch (error) {
@@ -329,22 +325,21 @@ export const deleteVideo = async (req, res) => {
             });
         }
 
-        // Delete from GCS
+        // Delete from Cloudinary
         try {
-            await deleteFromGCS(video.fileName);
+            await deleteFromCloudinary(video.videoUrl, 'video');
             if (video.thumbnailUrl) {
-                const thumbnailFileName = video.thumbnailUrl.split('/').pop();
-                await deleteFromGCS(`thumbnails/${thumbnailFileName}`);
+                await deleteFromCloudinary(video.thumbnailUrl, 'image');
             }
             // Delete all associated documents
             if (video.documents && video.documents.length > 0) {
                 for (const doc of video.documents) {
-                    await deleteFromGCS(doc.fileName);
+                    await deleteFromCloudinary(doc.url, 'raw');
                 }
-                console.log(`✅ Deleted ${video.documents.length} document(s) from GCS`);
+                console.log(`✅ Deleted ${video.documents.length} document(s) from Cloudinary`);
             }
-        } catch (gcsError) {
-            console.error('Error deleting from GCS:', gcsError);
+        } catch (cloudinaryError) {
+            console.error('Error deleting from Cloudinary:', cloudinaryError);
         }
 
         // Remove from user's uploaded videos
@@ -467,13 +462,10 @@ export const updateTranscription = async (req, res) => {
 
         // If file is uploaded, store it
         if (transcriptFile) {
-            const timestamp = Date.now();
-            const transcriptFileName = `transcripts/${req.userId}_${timestamp}.txt`;
-            
-            const transcriptUrl = await uploadToGCS(
+            const transcriptUrl = await uploadToCloudinary(
                 transcriptFile.buffer,
-                transcriptFileName,
-                'text/plain'
+                'transcripts',
+                'raw'
             );
 
             video.transcriptUrl = transcriptUrl;

@@ -1,104 +1,15 @@
- import videoIntelligence from '@google-cloud/video-intelligence';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Storage } from '@google-cloud/storage';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Initialize Google Cloud Video Intelligence client
-const videoClient = new videoIntelligence.VideoIntelligenceServiceClient({
-    keyFilename: path.join(__dirname, '../../', process.env.GCS_KEY_FILE)
-});
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Initialize Google Cloud Storage
-const storage = new Storage({
-    keyFilename: path.join(__dirname, '../../', process.env.GCS_KEY_FILE),
-    projectId: process.env.GCS_PROJECT_ID
-});
-
 /**
- * Transcribe video using Google Video Intelligence API (designed for videos!)
- */
-const transcribeVideoDirectly = async (videoFileName) => {
-    try {
-        console.log('🎬 Starting transcription using Video Intelligence API...');
-        
-        const gcsUri = `gs://${process.env.GCS_BUCKET_NAME}/${videoFileName}`;
-        console.log('📹 Video URI:', gcsUri);
-        
-        const request = {
-            inputUri: gcsUri,
-            features: ['SPEECH_TRANSCRIPTION'],
-            videoContext: {
-                speechTranscriptionConfig: {
-                    languageCode: 'en-US',
-                    enableAutomaticPunctuation: true,
-                }
-            }
-        };
-
-        console.log('🚀 Starting video analysis...');
-        
-        // Start the long-running operation
-        const [operation] = await videoClient.annotateVideo(request);
-        
-        console.log('⏳ Transcription in progress... This may take several minutes.');
-        console.log('📊 Operation name:', operation.name);
-        
-        // Wait for the operation to complete
-        const [operationResult] = await operation.promise();
-        
-        console.log('✅ Video analysis completed!');
-        
-        // Get transcription results
-        const transcriptionResult = operationResult.annotationResults[0];
-        
-        if (!transcriptionResult.speechTranscriptions || transcriptionResult.speechTranscriptions.length === 0) {
-            console.log('⚠️ No speech detected in video');
-            return '';
-        }
-        
-        // Combine all transcription alternatives
-        const transcription = transcriptionResult.speechTranscriptions
-            .map(speechTranscription => {
-                return speechTranscription.alternatives[0].transcript;
-            })
-            .join(' ');
-        
-        console.log('✅ Transcription extracted successfully');
-        console.log('📝 Transcript length:', transcription.length, 'characters');
-        
-        return transcription;
-    } catch (error) {
-        console.error('❌ Error transcribing video:', error);
-        console.error('Error details:', error.message);
-        throw error;
-    }
-};
-
-/**
- * Generate transcript for a video (NO FFMPEG REQUIRED - Pure GCP Solution!)
+ * Generate transcript for a video
+ * Note: Automatic transcription is disabled. Users can manually upload transcripts.
  */
 export const generateTranscript = async (videoFileName) => {
-    try {
-        console.log('🎬 Starting transcript generation for:', videoFileName);
-        console.log('📹 Using GCP Video Intelligence API (designed for videos!)');
-        
-        // Transcribe video directly from GCS
-        const transcript = await transcribeVideoDirectly(videoFileName);
-        
-        console.log('✅ Transcript generated successfully');
-        console.log('📝 Transcript length:', transcript.length, 'characters');
-        return transcript;
-    } catch (error) {
-        console.error('❌ Error generating transcript:', error);
-        return ''; // Return empty string on error
-    }
+    console.log('⚠️ Automatic transcription is disabled. Users can manually upload transcripts.');
+    return ''; // Return empty string - manual transcription only
 };
 
 /**

@@ -1,216 +1,157 @@
-# CampusStream
+# CampusStream - Now 100% FREE! 🎉
 
-A comprehensive educational video streaming platform designed for campus use, allowing students and educators to upload, share, and collaborate on educational content with AI-powered features.
+A comprehensive educational video streaming platform with AI-powered features, using **completely FREE services** - no credit card required!
 
-## 🌟 Features
+## 🌟 What Changed?
+
+**Replaced Google Cloud (paid) with free alternatives:**
+- ❌ Google Cloud Storage → ✅ **Cloudinary** (25GB free storage)
+- ❌ Google Speech-to-Text → ✅ **Manual transcription** (optional)
+- ❌ Google Video Intelligence → ✅ Removed (optional feature)
+- ✅ **Kept Gemini AI** (1500 free requests/day for chatbot & quizzes)
+
+## 💰 Cost Breakdown (All FREE!)
+
+| Service | Free Tier | Usage |
+|---------|-----------|-------|
+| **Cloudinary** | 25GB storage + 25GB bandwidth/month | Videos, thumbnails, documents |
+| **Gemini AI** | 1500 requests/day | Chatbot, quizzes, summaries |
+| **MongoDB Atlas** | 512MB storage | User data, videos metadata |
+| **Vercel** | 100GB bandwidth | Hosting frontend + API |
+| **Auth0** | 7,000 active users | Authentication |
+
+**Total Monthly Cost: $0** ✨
+
+## 🚀 Quick Setup (3 Steps)
+
+### 1. Install Dependencies
+```bash
+npm install
+cd frontend && npm install
+```
+
+### 2. Get Your FREE API Keys
+
+#### Cloudinary (Video/File Storage)
+1. Sign up at [cloudinary.com](https://cloudinary.com)
+2. Dashboard → Copy: Cloud Name, API Key, API Secret
+
+#### Gemini AI (Chatbot/Quizzes)
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create API Key → Copy it
+
+#### MongoDB Atlas
+1. Sign up at [mongodb.com/atlas](https://www.mongodb.com/cloud/atlas)
+2. Create free cluster → Get connection string
+
+#### Auth0 (Authentication)
+1. Sign up at [auth0.com](https://auth0.com)
+2. Create SPA application → Get Domain, Client ID, Audience
+
+### 3. Configure Environment
+
+Create `.env` in root:
+```env
+MONGO_URI=your_mongodb_connection_string
+AUTH0_DOMAIN=your-domain.auth0.com
+AUTH0_AUDIENCE=your-auth0-api-identifier
+AUTH0_ISSUER=https://your-domain.auth0.com/
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+GEMINI_API_KEY=your-gemini-api-key
+FRONTEND_URL=http://localhost:3000
+PORT=5000
+```
+
+Create `frontend/.env`:
+```env
+REACT_APP_API_URL=http://localhost:5000
+REACT_APP_AUTH0_DOMAIN=your-domain.auth0.com
+REACT_APP_AUTH0_CLIENT_ID=your-client-id
+REACT_APP_AUTH0_AUDIENCE=your-auth0-api-identifier
+```
+
+### 4. Run Application
+```bash
+# Terminal 1 - Backend
+npm run dev
+
+# Terminal 2 - Frontend  
+cd frontend && npm start
+```
+
+Visit **http://localhost:3000** 🎉
+
+## 📋 Features
 
 ### Video Management
-- **Video Upload & Streaming**: Upload educational videos with support for large file sizes
-- **Automatic Transcription**: AI-powered automatic transcription of video content using Google Cloud Speech-to-Text
-- **Thumbnail Support**: Custom thumbnail upload or automatic generation
-- **Video Organization**: Organize videos by subject, year (1st-4th year), semester, unit (CO1-CO5), and topics
-- **My Videos**: Personal dashboard to manage your uploaded content
-- **Related Videos**: Smart suggestions for related educational content
+- ✅ Upload videos (up to 100MB recommended on free tier)
+- ✅ Custom thumbnail upload
+- ✅ Organize by subject, year (1st-4th), semester, unit (CO1-CO5)
+- ✅ **Manual transcript upload** (.txt files)
+- ✅ Document attachments (PDF, PPT, DOCX)
+- ✅ My Videos dashboard
+- ✅ Related video suggestions
 
-### AI-Powered Features
-- **AI Chatbot**: Interactive chatbot powered by Google Gemini AI that can answer questions about video content
-- **Context-Aware Responses**: AI has access to video transcriptions, descriptions, topics, and attached documents
-- **Smart Search**: Find videos based on content, not just titles
+### AI-Powered Features (Gemini AI - FREE)
+- ✅ **AI Chatbot** - Ask questions about video content
+- ✅ **Quiz Generation** - Auto-generate quizzes from transcripts
+- ✅ **Smart Summaries** - Get lecture summaries
+- ✅ Context-aware responses (uses transcripts, descriptions, topics)
 
 ### Interactive Learning
-- **Video Notes**: Take timestamped notes while watching videos
-- **Comments System**: Engage with the community through comments on videos
-- **Bookmarks**: Save videos for quick access later
-- **Watch Later**: Queue videos to watch at a later time
-- **Playlists**: Create and manage custom playlists of videos
+- ✅ Timestamped video notes
+- ✅ Comments system
+- ✅ Bookmarks
+- ✅ Watch Later queue
+- ✅ Custom playlists
 
 ### User Features
-- **User Profiles**: Personalized user profiles with activity tracking
-- **Authentication**: Secure authentication powered by Auth0
-- **Social Sharing**: Share videos with peers easily
+- ✅ User profiles with activity tracking
+- ✅ Secure Auth0 authentication
+- ✅ Social sharing
 
 ### Content Organization
-- **Subject-Based Classification**: Organize content by academic subjects
-- **Unit-Based Learning**: Content organized by course outcomes (CO1-CO5)
-- **Tag System**: Flexible tagging for better discoverability
-- **Document Attachments**: Attach PDF and other documents to videos for supplementary materials
+- ✅ Subject-based classification
+- ✅ Unit-based learning (CO1-CO5)
+- ✅ Tag system
+- ✅ Advanced search & filters
 
 ## 🏗️ Tech Stack
 
 ### Frontend
-- **React 18** with TypeScript
-- **React Router** for navigation
-- **TanStack Query** for data fetching and state management
-- **Tailwind CSS** for styling
-- **Framer Motion** for animations
-- **Auth0 React SDK** for authentication
-- **Axios** for API calls
-- **Lucide React** for icons
-- **React Markdown** for rendering markdown content
+- React 18 + TypeScript
+- TailwindCSS + Framer Motion
+- TanStack Query
+- Auth0 React SDK
 
 ### Backend
-- **Node.js** with Express.js
-- **MongoDB** with Mongoose for database
-- **Google Cloud Storage** for video and file storage
-- **Google Cloud Speech-to-Text** for transcription
-- **Google Cloud Video Intelligence** for video analysis
-- **Google Gemini AI** for chatbot functionality
-- **Auth0** for authentication and authorization
-- **Multer** for file upload handling
-- **FFmpeg** for video processing
-- **JWT** for token management
+- Node.js + Express
+- MongoDB + Mongoose
+- **Cloudinary** (video/file storage) ✨ NEW
+- **Google Gemini AI** (chatbot/quizzes)
+- Auth0 + JWT
+- Multer
 
-### Deployment
-- **Vercel** for hosting (serverless functions + static frontend)
-- **MongoDB Atlas** for database hosting
-- **Google Cloud Platform** for storage and AI services
+### Deployment (All FREE)
+- Vercel (hosting)
+- MongoDB Atlas (database)
+- Cloudinary (storage)
 
-## 📋 Prerequisites
+## 🎯 What Works Without Google Cloud?
 
-Before setting up the project, ensure you have:
+✅ **Working:**
+- Video uploads (Cloudinary)
+- All file uploads
+- Video streaming
+- AI chatbot (Gemini)
+- Quiz generation
+- All user features
 
-- **Node.js** (v16 or higher)
-- **npm** or **yarn** package manager
-- **MongoDB** account (MongoDB Atlas recommended)
-- **Google Cloud Platform** account with the following APIs enabled:
-  - Cloud Storage API
-  - Speech-to-Text API
-  - Video Intelligence API
-  - Gemini API (for AI features)
-- **Auth0** account
-- **Vercel** account (for deployment)
-
-## 🚀 Setup Instructions
-
-### 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-cd CampusStream
-```
-
-### 2. Backend Setup
-
-#### Install Dependencies
-
-```bash
-npm install
-```
-
-#### Configure Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-
-# MongoDB Configuration
-MONGO_URI=your_mongodb_connection_string
-
-# Auth0 Configuration
-AUTH0_DOMAIN=your_auth0_domain
-AUTH0_AUDIENCE=your_auth0_api_identifier
-AUTH0_ISSUER=https://your_auth0_domain/
-AUTH0_CLIENT_ID=your_auth0_client_id
-AUTH0_CLIENT_SECRET=your_auth0_client_secret
-
-# Google Cloud Storage Configuration
-GCS_PROJECT_ID=your_gcs_project_id
-GCS_BUCKET_NAME=your_gcs_bucket_name
-GCS_KEY_FILE=gcs-key.json
-
-# Google AI Configuration
-GEMINI_API_KEY=your_gemini_api_key
-
-# Frontend URL (for CORS)
-FRONTEND_URL=http://localhost:3000
-
-# Vercel Configuration (for production)
-VERCEL_URL=your_vercel_deployment_url
-```
-
-#### Setup Google Cloud Storage
-
-1. Create a Google Cloud Project
-2. Enable required APIs (Storage, Speech-to-Text, Video Intelligence)
-3. Create a service account and download the JSON key file
-4. Save the key file as `gcs-key.json` in the root directory
-5. Create a Cloud Storage bucket for storing videos
-
-### 3. Frontend Setup
-
-Navigate to the frontend directory:
-
-```bash
-cd frontend
-```
-
-#### Install Dependencies
-
-```bash
-npm install
-```
-
-#### Configure Environment Variables
-
-Create a `.env` file in the `frontend` directory:
-
-```env
-REACT_APP_API_URL=http://localhost:5000
-REACT_APP_AUTH0_DOMAIN=your_auth0_domain
-REACT_APP_AUTH0_CLIENT_ID=your_auth0_client_id
-REACT_APP_AUTH0_AUDIENCE=your_auth0_api_identifier
-```
-
-### 4. Auth0 Configuration
-
-1. Create an Auth0 application (Single Page Application)
-2. Configure allowed callback URLs:
-   - `http://localhost:3000`
-   - `https://your-vercel-domain.vercel.app`
-3. Configure allowed logout URLs (same as callback URLs)
-4. Configure allowed web origins (same as callback URLs)
-5. Create an API in Auth0 with a unique identifier (use this as `AUTH0_AUDIENCE`)
-6. Enable RBAC in API settings
-
-### 5. Running the Application
-
-#### Development Mode
-
-Start the backend server:
-
-```bash
-# From root directory
-npm run dev
-```
-
-Start the frontend development server:
-
-```bash
-# From frontend directory
-cd frontend
-npm start
-```
-
-The application will be available at:
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:5000`
-
-#### Production Build
-
-Build the frontend:
-
-```bash
-npm run build
-```
-
-Start the production server:
-
-```bash
-npm start
-```
+❌ **Removed:**
+- Automatic video transcription
+  - **Solution:** Upload .txt transcript files manually
 
 ## 📦 Deployment
 
