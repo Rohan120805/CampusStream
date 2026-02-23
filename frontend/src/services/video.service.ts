@@ -64,6 +64,11 @@ export const videoService = {
     return data;
   },
 
+  generateTranscript: async (id: string) => {
+    const { data } = await api.post(`/videos/${id}/generate-transcript`);
+    return data;
+  },
+
   getRelatedVideos: async (id: string, limit: number = 6) => {
     const { data } = await api.get(`/videos/${id}/related`, { params: { limit } });
     return data;

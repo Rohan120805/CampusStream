@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { videoService } from '../services/video.service';
 import { BackgroundGradient } from '../components/ui/background-gradient';
 import { Button } from '../components/ui/button';
@@ -12,23 +12,26 @@ import { ShareButton } from '../components/video/ShareButton';
 import { VideoNotes } from '../components/video/VideoNotes';
 import { VideoActions } from '../components/video/VideoActions';
 import { formatDate, formatViews } from '../lib/utils';
-import { 
-  Heart, 
-  Eye, 
-  Calendar, 
-  User, 
-  BookOpen, 
-  FileText, 
+import {
+  Heart,
+  Eye,
+  Calendar,
+  User,
+  BookOpen,
+  FileText,
   Download,
   Tag,
   GraduationCap,
-  Layers
+  Layers,
+  Wand2,
+  Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const VideoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isLiked, setIsLiked] = useState(false);
   const [currentVideoTime, setCurrentVideoTime] = useState(0);
 
@@ -36,6 +39,13 @@ export const VideoPage: React.FC = () => {
     queryKey: ['video', id],
     queryFn: () => videoService.getVideoById(id!),
     enabled: !!id,
+  });
+
+  const transcriptMutation = useMutation({
+    mutationFn: () => videoService.generateTranscript(id!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['video', id] });
+    },
   });
 
   const handleLike = async () => {
@@ -242,25 +252,54 @@ export const VideoPage: React.FC = () => {
             </motion.div>
 
             {/* Transcript Section */}
-            {video.transcript && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <BackgroundGradient className="p-4 sm:p-6">
-                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
-                    <FileText size={18} className="sm:w-[20px] sm:h-[20px]" />
-                    Transcript
-                  </h2>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <BackgroundGradient className="p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                  <FileText size={18} className="sm:w-[20px] sm:h-[20px]" />
+                  Transcript
+                </h2>
+                {video.transcript ? (
                   <div className="bg-slate-900/50 p-3 sm:p-4 rounded-lg max-h-96 overflow-y-auto">
                     <p className="text-sm sm:text-base text-gray-300 whitespace-pre-wrap leading-relaxed">
                       {video.transcript}
                     </p>
                   </div>
-                </BackgroundGradient>
-              </motion.div>
-            )}
+                ) : (
+                  <div className="text-center py-6">
+                    <p className="text-gray-400 mb-4 text-sm">
+                      No transcript available yet.
+                    </p>
+                    <button
+                      onClick={() => transcriptMutation.mutate()}
+                      disabled={transcriptMutation.isPending}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg font-semibold text-sm hover:from-purple-600 hover:to-blue-600 transition-all disabled:opacity-50"
+                    >
+                      {transcriptMutation.isPending ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" />
+                          Generating Transcript...
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 size={16} />
+                          Generate Transcript with AI
+                        </>
+                      )}
+                    </button>
+                    {transcriptMutation.isError && (
+                      <p className="text-red-400 text-sm mt-2">
+                        {(transcriptMutation.error as any)?.response?.data?.message ||
+                          'Failed to generate transcript. Please try again.'}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </BackgroundGradient>
+            </motion.div>
           </div>
 
           {/* Sidebar - Right Side */}

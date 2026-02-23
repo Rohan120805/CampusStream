@@ -1,9 +1,9 @@
 import express from 'express';
-import { 
-    uploadVideo, 
-    getAllVideos, 
-    getVideoById, 
-    updateVideo, 
+import {
+    uploadVideo,
+    getAllVideos,
+    getVideoById,
+    updateVideo,
     deleteVideo,
     toggleLike,
     getMyVideos,
@@ -12,7 +12,8 @@ import {
     getAllSubjects,
     getRelatedVideos,
     incrementShareCount,
-    updateChapters
+    updateChapters,
+    generateVideoTranscript
 } from '../controllers/video.controller.js';
 import { authenticate } from '../middleware/auth.js';
 import { uploadVideoComplete, handleUploadError, uploadTranscript } from '../middleware/upload.js';
@@ -37,5 +38,6 @@ router.post('/:id/share', authenticate, incrementShareCount);
 router.put('/:id/chapters', authenticate, updateChapters);
 router.get('/:id/transcript', authenticate, getTranscript);
 router.put('/:id/transcript', authenticate, uploadTranscript, updateTranscription);
+router.post('/:id/generate-transcript', authenticate, generateVideoTranscript);
 
 export default router;

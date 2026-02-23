@@ -1,7 +1,7 @@
 import Video from '../models/video.model.js';
 import User from '../models/user.model.js';
 import { uploadToCloudinary, deleteFromCloudinary } from '../config/storage.js';
-import { processVideoTranscription } from '../utils/transcriptionService.js';
+import { processVideoTranscription, generateTranscript, generateSummary } from '../utils/transcriptionService.js';
 import path from 'path';
 
 /**
@@ -523,6 +523,80 @@ export const getTranscript = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error fetching transcript',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Generate transcript automatically using AI (Groq Whisper)
+ */
+export const generateVideoTranscript = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const video = await Video.findById(id);
+
+        if (!video) {
+            return res.status(404).json({
+                success: false,
+                message: 'Video not found'
+            });
+        }
+
+        // Check if user is the owner
+        if (video.uploadedBy.toString() !== req.userId.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: 'You do not have permission to generate a transcript for this video'
+            });
+        }
+
+        if (!video.videoUrl) {
+            return res.status(400).json({
+                success: false,
+                message: 'Video URL not available'
+            });
+        }
+
+        // Generate transcript
+        console.log('Generating transcript for video:', id);
+        const transcript = await generateTranscript(video.videoUrl);
+
+        if (!transcript) {
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to generate transcript'
+            });
+        }
+
+        video.transcript = transcript;
+
+        // Generate summary from transcript
+        try {
+            const summary = await generateSummary(transcript);
+            if (summary) {
+                video.summary = summary;
+            }
+        } catch (summaryError) {
+            console.error('Summary generation failed (transcript still saved):', summaryError.message);
+        }
+
+        await video.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Transcript generated successfully',
+            data: {
+                transcript: video.transcript,
+                summary: video.summary
+            }
+        });
+    } catch (error) {
+        console.error('Error generating transcript:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Error generating transcript',
             error: error.message
         });
     }

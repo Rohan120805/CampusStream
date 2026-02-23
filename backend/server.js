@@ -15,7 +15,7 @@ console.log('🔧 Environment Configuration Check:');
 console.log('  AUTH0_DOMAIN:', process.env.AUTH0_DOMAIN || '❌ NOT SET');
 console.log('  AUTH0_AUDIENCE:', process.env.AUTH0_AUDIENCE || '❌ NOT SET');
 console.log('  AUTH0_ISSUER:', process.env.AUTH0_ISSUER || '❌ NOT SET');
-console.log('  GCS_PROJECT_ID:', process.env.GCS_PROJECT_ID ? '✅ Set' : '⚠️ Not set');
+console.log('  GROQ_API_KEY:', process.env.GROQ_API_KEY ? '✅ Set' : '⚠️ Not set');
 console.log('  MONGO_URI:', process.env.MONGO_URI ? '✅ Set' : '❌ NOT SET');
 console.log('');
 
@@ -28,8 +28,6 @@ import commentRoutes from './routes/comment.route.js';
 import aiRoutes from './routes/ai.route.js';
 import userRoutes from './routes/user.route.js';
 import noteRoutes from './routes/note.route.js';
-// Import and initialize GCS after env is loaded
-import './config/gcs.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;

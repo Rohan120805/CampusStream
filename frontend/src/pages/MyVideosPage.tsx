@@ -4,19 +4,20 @@ import { videoService } from '../services/video.service';
 import { BackgroundGradient } from '../components/ui/background-gradient';
 import { Button } from '../components/ui/button';
 import { formatDate } from '../lib/utils';
-import { 
-  Play, 
-  Eye, 
-  Heart, 
-  Edit, 
-  Trash2, 
+import {
+  Play,
+  Eye,
+  Heart,
+  Edit,
+  Trash2,
   Calendar,
   BookOpen,
   Layers,
   GraduationCap,
   FileText,
   Upload,
-  AlertCircle
+  AlertCircle,
+  Wand2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -42,6 +43,7 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
   });
   const [transcriptFile, setTranscriptFile] = useState<File | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isGeneratingTranscript, setIsGeneratingTranscript] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -242,6 +244,36 @@ const EditVideoModal: React.FC<EditModalProps> = ({ video, isOpen, onClose, onUp
                 Selected: {transcriptFile.name}
               </p>
             )}
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-xs text-gray-500">or</span>
+              <button
+                type="button"
+                onClick={async () => {
+                  setIsGeneratingTranscript(true);
+                  try {
+                    await videoService.generateTranscript(video._id);
+                    queryClient.invalidateQueries({ queryKey: ['myVideos'] });
+                    queryClient.invalidateQueries({ queryKey: ['video', video._id] });
+                    alert('Transcript generated successfully!');
+                  } catch (error: any) {
+                    alert(error.response?.data?.message || 'Failed to generate transcript');
+                  } finally {
+                    setIsGeneratingTranscript(false);
+                  }
+                }}
+                disabled={isGeneratingTranscript}
+                className="text-sm text-purple-400 hover:text-purple-300 flex items-center gap-1 disabled:opacity-50"
+              >
+                {isGeneratingTranscript ? (
+                  <>Generating...</>
+                ) : (
+                  <>
+                    <Wand2 size={14} />
+                    Generate with AI
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 pt-4 sticky bottom-0 bg-slate-900 pb-2">

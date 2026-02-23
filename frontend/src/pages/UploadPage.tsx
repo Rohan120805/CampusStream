@@ -135,7 +135,7 @@ export const UploadPage: React.FC = () => {
 
       setUploadProgress({
         status: 'success',
-        message: 'Video uploaded successfully! Transcription will be generated automatically.',
+        message: 'Video uploaded successfully! You can generate a transcript from the video page.',
         progress: 100
       });
 
@@ -164,7 +164,7 @@ export const UploadPage: React.FC = () => {
         <p className="text-gray-400 mb-2 text-sm sm:text-base">Share your educational content with the community</p>
         <div className="flex items-center gap-2 text-xs sm:text-sm text-green-400 mb-6 sm:mb-8">
           <FileText size={16} />
-          <span>Transcription will be automatically generated using AI</span>
+          <span>After uploading, you can generate a transcript using AI on the video page</span>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
