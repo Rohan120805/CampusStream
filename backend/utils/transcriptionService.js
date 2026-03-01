@@ -1,4 +1,5 @@
 import Groq from 'groq-sdk';
+import { uploadToCloudinary } from '../config/storage.js';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -108,7 +109,7 @@ Summary:`;
 
 /**
  * Process video transcription end-to-end:
- * generate transcript from video URL, then generate summary.
+ * generate transcript from video URL, upload it to Cloudinary, then generate summary.
  */
 export const processVideoTranscription = async (video) => {
     try {
@@ -118,6 +119,16 @@ export const processVideoTranscription = async (video) => {
 
         if (transcript) {
             video.transcript = transcript;
+
+            // Upload transcript text to Cloudinary as a raw file
+            try {
+                const transcriptBuffer = Buffer.from(transcript, 'utf-8');
+                const transcriptUrl = await uploadToCloudinary(transcriptBuffer, 'transcripts', 'raw');
+                video.transcriptUrl = transcriptUrl;
+                console.log('Transcript uploaded to Cloudinary:', transcriptUrl);
+            } catch (uploadError) {
+                console.error('Failed to upload transcript to Cloudinary:', uploadError.message);
+            }
 
             try {
                 const summary = await generateSummary(transcript);
@@ -129,7 +140,7 @@ export const processVideoTranscription = async (video) => {
             }
 
             await video.save();
-            console.log('Transcription completed and saved');
+            console.log('Transcription completed and saved for video:', video._id);
         } else {
             console.log('No transcript generated');
         }

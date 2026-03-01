@@ -10,8 +10,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        lowercase: true,
-        match: [/@klh\.edu\.in$/, 'Only KLH email addresses are allowed']
+        lowercase: true
     },
     name: {
         type: String,

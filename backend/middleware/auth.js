@@ -105,20 +105,12 @@ export const authenticate = async (req, res, next) => {
                     console.log('   Checking: decoded[audience/email] =', decoded[`${process.env.AUTH0_AUDIENCE}/email`]);
                     console.log('   Checking: decoded[hardcoded/email] =', decoded['https://campusstream-api/email']);
                     
-                    // Verify organization email domain
+                    // Verify email exists in token
                     if (!email) {
                         console.log('❌ No email found in token');
-                        return res.status(403).json({ 
-                            success: false, 
-                            message: 'Email not found in token. Please ensure email is included in Auth0 token.' 
-                        });
-                    }
-                    
-                    if (!email.endsWith('@klh.edu.in')) {
-                        console.log('❌ Unauthorized domain:', email);
-                        return res.status(403).json({ 
-                            success: false, 
-                            message: 'Access restricted to @klh.edu.in email addresses only' 
+                        return res.status(403).json({
+                            success: false,
+                            message: 'Email not found in token. Please ensure email is included in Auth0 token.'
                         });
                     }
                     

@@ -146,7 +146,7 @@ export const ProfilePage: React.FC = () => {
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle size={16} className="text-green-400 flex-shrink-0 mt-0.5" />
-                  <span>Access is restricted to @klh.edu.in email addresses only</span>
+                  <span>Access is secured with authenticated email addresses</span>
                 </div>
               </div>
             </motion.div>

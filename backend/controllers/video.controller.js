@@ -126,14 +126,16 @@ export const uploadVideo = async (req, res) => {
 
         console.log('✅ Video document created in MongoDB');
 
-        // Note: Automatic transcription is disabled. Users can manually upload transcripts.
-        console.log('ℹ️ Automatic transcription is disabled. Users can manually upload transcripts via the edit video page.');
-
         res.status(201).json({
             success: true,
-            message: 'Video uploaded successfully. You can add a transcript later.',
+            message: 'Video uploaded successfully. Transcript is being generated in the background.',
             data: video
         });
+
+        // Non-blocking: generate transcript and store in cloud after responding
+        processVideoTranscription(video).catch(err =>
+            console.error('Background transcription failed for video', video._id, ':', err.message)
+        );
     } catch (error) {
         console.error('Error uploading video:', error);
         res.status(500).json({
