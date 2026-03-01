@@ -27,13 +27,12 @@ import {
   Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useAuth0 } from '@auth0/auth0-react';
+
 
 export const VideoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user: authUser } = useAuth0();
   const [isLiked, setIsLiked] = useState(false);
   const [currentVideoTime, setCurrentVideoTime] = useState(0);
 
@@ -49,8 +48,6 @@ export const VideoPage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['video', id] });
     },
   });
-
-  const isVideoOwner = authUser?.email === video?.uploadedBy?.email;
 
   const handleLike = async () => {
     if (!id) return;
@@ -277,32 +274,28 @@ export const VideoPage: React.FC = () => {
                     <p className="text-gray-400 mb-4 text-sm">
                       No transcript available yet.
                     </p>
-                    {isVideoOwner && (
-                      <>
-                        <button
-                          onClick={() => transcriptMutation.mutate()}
-                          disabled={transcriptMutation.isPending}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg font-semibold text-sm hover:from-purple-600 hover:to-blue-600 transition-all disabled:opacity-50"
-                        >
-                          {transcriptMutation.isPending ? (
-                            <>
-                              <Loader2 size={16} className="animate-spin" />
-                              Generating Transcript...
-                            </>
-                          ) : (
-                            <>
-                              <Wand2 size={16} />
-                              Generate Transcript with AI
-                            </>
-                          )}
-                        </button>
-                        {transcriptMutation.isError && (
-                          <p className="text-red-400 text-sm mt-2">
-                            {(transcriptMutation.error as any)?.response?.data?.message ||
-                              'Failed to generate transcript. Please try again.'}
-                          </p>
-                        )}
-                      </>
+                    <button
+                      onClick={() => transcriptMutation.mutate()}
+                      disabled={transcriptMutation.isPending}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg font-semibold text-sm hover:from-purple-600 hover:to-blue-600 transition-all disabled:opacity-50"
+                    >
+                      {transcriptMutation.isPending ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" />
+                          Generating Transcript...
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 size={16} />
+                          Generate Transcript with AI
+                        </>
+                      )}
+                    </button>
+                    {transcriptMutation.isError && (
+                      <p className="text-red-400 text-sm mt-2">
+                        {(transcriptMutation.error as any)?.response?.data?.message ||
+                          'Failed to generate transcript. Please try again.'}
+                      </p>
                     )}
                   </div>
                 )}

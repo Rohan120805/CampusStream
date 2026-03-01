@@ -546,14 +546,6 @@ export const generateVideoTranscript = async (req, res) => {
             });
         }
 
-        // Check if user is the owner
-        if (video.uploadedBy.toString() !== req.userId.toString()) {
-            return res.status(403).json({
-                success: false,
-                message: 'You do not have permission to generate a transcript for this video'
-            });
-        }
-
         if (!video.videoUrl) {
             return res.status(400).json({
                 success: false,
@@ -574,6 +566,16 @@ export const generateVideoTranscript = async (req, res) => {
 
         video.transcript = transcript;
 
+        // Upload transcript to Cloudinary as a raw file
+        try {
+            const transcriptBuffer = Buffer.from(transcript, 'utf-8');
+            const transcriptUrl = await uploadToCloudinary(transcriptBuffer, 'transcripts', 'raw');
+            video.transcriptUrl = transcriptUrl;
+            console.log('Transcript uploaded to Cloudinary:', transcriptUrl);
+        } catch (uploadError) {
+            console.error('Failed to upload transcript to Cloudinary:', uploadError.message);
+        }
+
         // Generate summary from transcript
         try {
             const summary = await generateSummary(transcript);
@@ -591,6 +593,7 @@ export const generateVideoTranscript = async (req, res) => {
             message: 'Transcript generated successfully',
             data: {
                 transcript: video.transcript,
+                transcriptUrl: video.transcriptUrl,
                 summary: video.summary
             }
         });
