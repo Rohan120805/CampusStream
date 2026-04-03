@@ -113,7 +113,7 @@ export const VideoNotes: React.FC<VideoNotesProps> = ({ videoId, currentTime }) 
           <>
             {/* Backdrop */}
             <div
-              className="fixed inset-0 z-40"
+              className="fixed inset-0 z-[60] bg-black/20"
               onClick={() => setIsOpen(false)}
             />
 
@@ -123,7 +123,7 @@ export const VideoNotes: React.FC<VideoNotesProps> = ({ videoId, currentTime }) 
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: -10 }}
               style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
-              className="fixed w-96 max-h-[600px] bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-50 flex flex-col"
+              className="fixed w-96 max-h-[600px] bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-[70] flex flex-col"
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-slate-700">

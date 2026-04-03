@@ -75,7 +75,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ videoId, title }) => {
           <>
             {/* Backdrop */}
             <div
-              className="fixed inset-0 z-40"
+              className="fixed inset-0 z-[60] bg-black/20"
               onClick={() => setIsOpen(false)}
             />
 
@@ -85,7 +85,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ videoId, title }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: -10 }}
               style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
-              className="fixed w-80 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-50 p-4"
+              className="fixed w-80 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-[70] p-4"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Share Video</h3>
