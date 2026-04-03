@@ -28,7 +28,6 @@
     "web-vitals": "^2.1.4"
   },
   "overrides": {
-    "react-scripts": "5.0.1",
     "nth-check": "^2.1.1",
     "postcss": "^8.4.47",
     "serialize-javascript": "^7.0.5",
