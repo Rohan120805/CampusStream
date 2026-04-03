@@ -22,7 +22,7 @@ export const BackgroundGradient = ({
       />
       <div
         className={cn(
-          "relative z-10 bg-slate-900 rounded-3xl overflow-hidden",
+          "relative z-10 bg-slate-900 rounded-3xl overflow-visible",
           className
         )}
       >

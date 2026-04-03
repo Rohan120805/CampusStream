@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Share2, Link, Facebook, Twitter, Mail, Check, X } from 'lucide-react';
 import { videoService } from '../../services/video.service';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 
 interface ShareButtonProps {
   videoId: string;
@@ -11,9 +12,21 @@ interface ShareButtonProps {
 export const ShareButton: React.FC<ShareButtonProps> = ({ videoId, title }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
   const videoUrl = `${window.location.origin}/video/${videoId}`;
   const embedCode = `<iframe width="560" height="315" src="${window.location.origin}/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        left: Math.max(8, rect.right - 320), // 320 is the dropdown width (w-80)
+      });
+    }
+  }, [isOpen]);
 
   const handleShare = async (platform: string) => {
     try {
@@ -49,6 +62,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ videoId, title }) => {
   return (
     <div className="relative">
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700"
       >
@@ -57,7 +71,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ videoId, title }) => {
       </button>
 
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && createPortal(
           <>
             {/* Backdrop */}
             <div
@@ -70,7 +84,8 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ videoId, title }) => {
               initial={{ opacity: 0, scale: 0.9, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: -10 }}
-              className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-50 p-4"
+              style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
+              className="fixed w-80 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-50 p-4"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Share Video</h3>
@@ -173,7 +188,8 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ videoId, title }) => {
                 </motion.div>
               )}
             </motion.div>
-          </>
+          </>,
+          document.body
         )}
       </AnimatePresence>
     </div>

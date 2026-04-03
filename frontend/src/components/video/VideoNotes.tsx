@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { noteService, Note } from '../../services/note.service';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StickyNote, Plus, Edit2, Trash2, Save, X, Clock } from 'lucide-react';
 import { Button } from '../ui/button';
+import { createPortal } from 'react-dom';
 
 interface VideoNotesProps {
   videoId: string;
@@ -16,6 +17,18 @@ export const VideoNotes: React.FC<VideoNotesProps> = ({ videoId, currentTime }) 
   const [newNoteContent, setNewNoteContent] = useState('');
   const [editContent, setEditContent] = useState('');
   const queryClient = useQueryClient();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        left: Math.max(8, rect.right - 384), // 384 is the dropdown width (w-96)
+      });
+    }
+  }, [isOpen]);
 
   const { data: notes, isLoading } = useQuery({
     queryKey: ['notes', videoId],
@@ -82,6 +95,7 @@ export const VideoNotes: React.FC<VideoNotesProps> = ({ videoId, currentTime }) 
   return (
     <div className="relative">
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700 relative"
       >
@@ -95,7 +109,7 @@ export const VideoNotes: React.FC<VideoNotesProps> = ({ videoId, currentTime }) 
       </button>
 
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && createPortal(
           <>
             {/* Backdrop */}
             <div
@@ -108,7 +122,8 @@ export const VideoNotes: React.FC<VideoNotesProps> = ({ videoId, currentTime }) 
               initial={{ opacity: 0, scale: 0.9, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: -10 }}
-              className="absolute right-0 mt-2 w-96 max-h-[600px] bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-50 flex flex-col"
+              style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
+              className="fixed w-96 max-h-[600px] bg-slate-900 border border-slate-700 rounded-lg shadow-2xl z-50 flex flex-col"
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-slate-700">
@@ -233,7 +248,8 @@ export const VideoNotes: React.FC<VideoNotesProps> = ({ videoId, currentTime }) 
                 )}
               </div>
             </motion.div>
-          </>
+          </>,
+          document.body
         )}
       </AnimatePresence>
     </div>

@@ -22,13 +22,20 @@
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.21.3",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "tailwind-merge": "^2.2.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "overrides": {
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.47",
+    "serialize-javascript": "^7.0.5",
+    "webpack-dev-server": "^5.2.1",
+    "yaml": "^2.7.0",
+    "@tootallnate/once": "^3.0.1",
+    "underscore": "^1.13.8"
   },
   "scripts": {
     "start": "react-scripts start",
