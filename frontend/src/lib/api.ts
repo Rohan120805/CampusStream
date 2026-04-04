@@ -2,18 +2,29 @@ import axios from 'axios';
 
 // Determine API URL based on environment
 const getApiUrl = () => {
-  // If explicitly set in env, use it
-  if (process.env.REACT_APP_API_URL) {
-    return process.env.REACT_APP_API_URL;
-  }
-  
-  // In production (on Vercel), use relative path
+  // In production (e.g., Vercel), always use the relative /api path unless
+  // REACT_APP_API_URL is explicitly set to a non-local external URL.
+  // This prevents a leftover REACT_APP_API_URL=http://localhost:5000/api env var
+  // (which may have been set for local testing) from breaking the production
+  // deployment with ERR_CONNECTION_REFUSED errors.
   if (process.env.NODE_ENV === 'production') {
+    const explicitUrl = process.env.REACT_APP_API_URL;
+    if (explicitUrl) {
+      try {
+        const { hostname } = new URL(explicitUrl);
+        const localHostnames = ['localhost', '127.0.0.1', '0.0.0.0', '::1'];
+        if (!localHostnames.includes(hostname)) {
+          return explicitUrl;
+        }
+      } catch {
+        // Malformed URL – fall through to the safe default below
+      }
+    }
     return '/api';
   }
-  
-  // In development, use localhost
-  return 'http://localhost:5000/api';
+
+  // In development, use explicit URL or localhost fallback
+  return process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 };
 
 const API_URL = getApiUrl();

@@ -1,8 +1,5 @@
 import api from '../lib/api';
-import axios from 'axios';
 import { Video, VideoFilters } from '../types';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 export const videoService = {
   getAllVideos: async (params?: VideoFilters) => {
@@ -11,8 +8,10 @@ export const videoService = {
   },
 
   getAllSubjects: async (): Promise<string[]> => {
-    // Use axios directly to bypass auth interceptor for public endpoint
-    const { data } = await axios.get(`${API_URL}/videos/subjects/all`);
+    // Public endpoint – the api instance's auth interceptor only adds the
+    // Bearer token when one is present in localStorage, so this is safe to
+    // call both with and without an active session.
+    const { data } = await api.get('/videos/subjects/all');
     return data.data;
   },
 
